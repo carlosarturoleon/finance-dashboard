@@ -1,84 +1,120 @@
 :root {
-    /* Colors */
-    --color-white: #FFFFFF;
-    --color-black: #000000;
-    
-    /* Primary colors */
-    --color-primary-green: #277C78;
-    --color-primary-cyan: #82C9D7;
-    --color-primary-beige: #F2CDAC;
-    --color-primary-navy: #626070;
-    
-    /* Neutral colors */
-    --color-bg-light: #F5F7FA;
-    --color-text-dark: #1F1E32;
-    --color-text-mid: #5E5E5E;
-    --color-text-light: #7F7F7F;
-    --color-border: #EAEBEF;
-    
-    /* Semantic colors */
-    --color-positive: #277C78;
-    --color-negative: #E74C3C;
-    
-    /* Theme colors */
-    --color-theme-green: #277C78;
-    --color-theme-yellow: #F4BC52;
-    --color-theme-cyan: #82C9D7;
-    --color-theme-navy: #626070;
-    --color-theme-red: #E36666;
-    --color-theme-purple: #826CB0;
-    --color-theme-turquoise: #5AC5C5;
-    --color-theme-brown: #BA9367;
-    --color-theme-magenta: #AD5D79;
-    --color-theme-blue: #5C7BC3;
-    --color-theme-navy-grey: #4B4D58;
-    --color-theme-army-green: #636E51;
-    --color-theme-pink: #E2949B;
-    --color-theme-gold: #D5A44A;
-    --color-theme-orange: #E98852;
-    
-    /* Typography */
-    --font-family: 'Plus Jakarta Sans', sans-serif;
-    --font-size-xs: 0.75rem;    /* 12px */
-    --font-size-sm: 0.875rem;   /* 14px */
-    --font-size-base: 1rem;     /* 16px */
-    --font-size-md: 1.125rem;   /* 18px */
-    --font-size-lg: 1.25rem;    /* 20px */
-    --font-size-xl: 1.5rem;     /* 24px */
-    --font-size-2xl: 2rem;      /* 32px */
-    --font-size-3xl: 2.5rem;    /* 40px */
-    
-    /* Font weights */
-    --font-weight-regular: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    
-    /* Spacing */
-    --spacing-xs: 0.25rem;      /* 4px */
-    --spacing-sm: 0.5rem;       /* 8px */
-    --spacing-md: 0.75rem;      /* 12px */
-    --spacing-base: 1rem;       /* 16px */
-    --spacing-lg: 1.5rem;       /* 24px */
-    --spacing-xl: 2rem;         /* 32px */
-    --spacing-2xl: 2.5rem;      /* 40px */
-    --spacing-3xl: 3rem;        /* 48px */
-    
-    /* Border radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --radius-full: 9999px;
-    
-    /* Shadows */
-    --shadow-sm: 0px 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0px 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow-lg: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0px 8px 16px rgba(0, 0, 0, 0.1);
-    
-    /* Transitions */
-    --transition-fast: 150ms ease;
-    --transition-normal: 250ms ease;
-    --transition-slow: 350ms ease;
-  }
+  /* Base colors */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  
+  /* Beige colors */
+  --color-beige-500: #98908B;
+  --color-beige-100: #F8F4F0;
+  
+  /* Slate color */
+  --color-slate-600: #666CA3;
+  
+  /* Grey colors */
+  --color-grey-900: #201F24;
+  --color-grey-500: #696868;
+  --color-grey-300: #B3B3B3;
+  --color-grey-100: #F2F2F2;
+  
+  /* Secondary colors */
+  --color-green: #277C78;
+  --color-yellow: #F2CDAC;
+  --color-cyan: #82C9D7;
+  --color-navy: #626070;
+  --color-red: #C94736;
+  --color-purple: #826CB0;
+  
+  /* Other colors */
+  --color-purple-light: #AF81BA;
+  --color-turquoise: #597C7C;
+  --color-brown: #93674F;
+  --color-magenta: #934F6F;
+  --color-blue: #3F82B2;
+  --color-navy-grey: #97A0AC;
+  --color-army-green: #7F9161;
+  --color-gold: #CAB361;
+  --color-orange: #BE6C49;
+  
+  /* Semantic aliases */
+  --color-text-primary: var(--color-grey-900);
+  --color-text-secondary: var(--color-grey-500);
+  --color-text-tertiary: var(--color-grey-300);
+  --color-text-inverse: var(--color-white);
+  
+  --color-background-primary: var(--color-white);
+  --color-background-secondary: var(--color-grey-100);
+  --color-background-brand: var(--color-green);
+  --color-background-dark: var(--color-grey-900);
+  
+  --color-border-default: var(--color-grey-100);
+  --color-border-strong: var(--color-grey-300);
+  
+  /* Typography */
+  --font-family: 'Public Sans', sans-serif;
+  
+  /* Font sizes based on text presets */
+  --font-size-12: 0.75rem;    /* 12px - Text Preset 5 */
+  --font-size-14: 0.875rem;   /* 14px - Text Preset 4 */
+  --font-size-16: 1rem;       /* 16px - Text Preset 3 */
+  --font-size-20: 1.25rem;    /* 20px - Text Preset 2 */
+  --font-size-32: 2rem;       /* 32px - Text Preset 1 */
+  
+  /* Line heights */
+  --line-height-120: 1.2;     /* 120% */
+  --line-height-150: 1.5;     /* 150% */
+  
+  /* Text presets */
+--text-preset-1: var(--font-size-32)/var(--line-height-120) var(--font-family);
+--text-preset-2: var(--font-size-20)/var(--line-height-120) var(--font-family);
+--text-preset-3: var(--font-size-16)/var(--line-height-150) var(--font-family);
+--text-preset-4: var(--font-size-14)/var(--line-height-150) var(--font-family);
+--text-preset-4-bold: var(--font-size-14)/var(--line-height-150) var(--font-family);
+--text-preset-5: var(--font-size-12)/var(--line-height-150) var(--font-family);
+--text-preset-5-bold: var(--font-size-12)/var(--line-height-150) var(--font-family);
+  
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  
+  /* Letter spacing */
+  --letter-spacing-0: 0px;    /* All text presets use 0px letter spacing */
+  
+  /* Spacing - Direct pixel values from design system */
+  --spacing-500: 2.5rem;      /* 40px */
+  --spacing-400: 2rem;        /* 32px */
+  --spacing-300: 1.5rem;      /* 24px */
+  --spacing-250: 1.25rem;     /* 20px */
+  --spacing-200: 1rem;        /* 16px */
+  --spacing-150: 0.75rem;     /* 12px */
+  --spacing-100: 0.5rem;      /* 8px */
+  --spacing-50: 0.25rem;      /* 4px */
+  
+  /* Border radius */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;      /* 2px */
+  --radius-default: 0.25rem;  /* 4px */
+  --radius-md: 0.5rem;        /* 8px */
+  --radius-lg: 0.75rem;       /* 12px */
+  --radius-xl: 1rem;          /* 16px */
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0px 1px 2px rgba(32, 31, 36, 0.05);
+  --shadow-default: 0px 1px 3px rgba(32, 31, 36, 0.1), 0px 1px 2px rgba(32, 31, 36, 0.06);
+  --shadow-md: 0px 4px 6px -1px rgba(32, 31, 36, 0.1), 0px 2px 4px -1px rgba(32, 31, 36, 0.06);
+  --shadow-lg: 0px 10px 15px -3px rgba(32, 31, 36, 0.1), 0px 4px 6px -2px rgba(32, 31, 36, 0.05);
+  --shadow-xl: 0px 20px 25px -5px rgba(32, 31, 36, 0.1), 0px 10px 10px -5px rgba(32, 31, 36, 0.04);
+  --shadow-2xl: 0px 25px 50px -12px rgba(32, 31, 36, 0.25);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+  
+  /* Text preset utility classes */
+  --text-preset-1: var(--font-size-32)/var(--line-height-120) var(--font-family);
+  --text-preset-2: var(--font-size-20)/var(--line-height-120) var(--font-family);
+  --text-preset-3: var(--font-size-16)/var(--line-height-150) var(--font-family);
+  --text-preset-4: var(--font-size-14)/var(--line-height-150) var(--font-family);
+  --text-preset-5: var(--font-size-12)/var(--line-height-150) var(--font-family);
+}
