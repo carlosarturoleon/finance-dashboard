@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 
@@ -10,93 +10,60 @@ import { ReactComponent as PotsIcon } from "../../assets/images/icon-nav-pots.sv
 import { ReactComponent as RecurringIcon } from "../../assets/images/icon-nav-recurring-bills.svg";
 import { ReactComponent as LogoLarge } from "../../assets/images/logo-large.svg";
 import { ReactComponent as LogoSmall } from "../../assets/images/logo-small.svg";
-import { ReactComponent as ArrowLeftIcon } from "../../assets/images/icon-minimize-menu.svg";
-import { ReactComponent as ArrowRightIcon } from "../../assets/images/icon-minimize-menu.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/images/icon-minimize-menu.svg";
 
-const Navigation = () => {
+// Navigation items configuration
+const NAV_ITEMS = [
+  { path: "/", exact: true, icon: HomeIcon, text: "Overview" },
+  { path: "/transactions", icon: TransactionsIcon, text: "Transactions" },
+  { path: "/budgets", icon: BudgetsIcon, text: "Budgets" },
+  { path: "/pots", icon: PotsIcon, text: "Pots" },
+  { path: "/recurring", icon: RecurringIcon, text: "Recurring Bills" }
+];
+
+const Navigation = React.memo(() => {
   const [isMinimized, setIsMinimized] = useState(false);
+  const toggleMinimize = useCallback(() => setIsMinimized(prev => !prev), []);
 
   return (
     <nav className={`navigation ${isMinimized ? "minimized" : ""}`}>
       <div className="nav-header">
         {isMinimized ? (
-          <LogoSmall className="logo logo-small" />
+          <LogoSmall className="logo logo-small" aria-label="Company logo small" />
         ) : (
-          <LogoLarge className="logo logo-large" />
+          <LogoLarge className="logo logo-large" aria-label="Company logo" />
         )}
       </div>
 
       <ul className="nav-links">
-        <li>
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">
-              <HomeIcon />
-            </span>
-            {!isMinimized && <span className="link-text">Overview</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/transactions"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">
-              <TransactionsIcon />
-            </span>
-            {!isMinimized && <span className="link-text">Transactions</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/budgets"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">
-              <BudgetsIcon />
-            </span>
-            {!isMinimized && <span className="link-text">Budgets</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/pots"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">
-              <PotsIcon />
-            </span>
-            {!isMinimized && <span className="link-text">Pots</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/recurring"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            <span className="icon">
-              <RecurringIcon />
-            </span>
-            {!isMinimized && <span className="link-text">Recurring Bills</span>}
-          </NavLink>
-        </li>
+        {NAV_ITEMS.map(item => (
+          <li key={item.path}>
+            <NavLink
+              to={item.path}
+              end={item.exact}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <span className="icon">
+                <item.icon aria-hidden="true" />
+              </span>
+              {!isMinimized && <span className="link-text">{item.text}</span>}
+            </NavLink>
+          </li>
+        ))}
       </ul>
 
       <div className="nav-footer">
         <button
           className="minimize-btn"
-          onClick={() => setIsMinimized(!isMinimized)}
+          onClick={toggleMinimize}
           aria-label={isMinimized ? "Expand menu" : "Minimize menu"}
         >
-          {isMinimized ? <ArrowRightIcon /> : <ArrowLeftIcon />}
+          <ArrowIcon aria-hidden="true" />
           {!isMinimized && <span className="minimize-text">Minimize Menu</span>}
         </button>
       </div>
     </nav>
   );
-};
+});
 
 export default Navigation;
