@@ -11,7 +11,6 @@
   z-index: 50;
   border-bottom-right-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
-  transition: width var(--transition-normal);
 }
 
 .navigation.minimized {
@@ -65,23 +64,27 @@
   text-decoration: none;
   width: calc(100% - var(--spacing-300)); /* Full width minus right padding */
   box-sizing: border-box;
-  transition: background-color var(--transition-fast);
+  border-left: var(--spacing-50) solid transparent;
+  height: 48px;
 }
 
 .nav-links li a:hover:not(.active) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--color-grey-900);
 }
 
 .nav-links li a .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: var(--spacing-200);
-  color: var(--color-grey-100);
+  line-height: 1; 
+  vertical-align: middle; 
 }
 
 .nav-links li a.active {
   color: var(--color-grey-900);
   font-weight: bold;
-  border-left: var(--spacing-50) solid var(--color-green);
-  padding-left: calc(var(--spacing-300) - var(--spacing-50)); /* 24px - 4px border */
+  border-left-color: var(--color-green);
   margin-left: 0;
   position: relative;
   background-color: var(--color-grey-100);
@@ -98,8 +101,8 @@
   padding: var(--spacing-300);
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
+/* Tablet styles */
+@media (max-width: 1024px) {
   .navigation {
     width: 100%;
     height: 72px;
@@ -134,11 +137,12 @@
     padding: var(--spacing-100);
     width: 100%;
     height: 72px;
+    border-bottom: var(--spacing-50) solid transparent;
   }
   
   .nav-links li a.active {
     border-left: none;
-    border-bottom: var(--spacing-50) solid var(--color-green);
+    border-bottom-color: var(--color-green);
     padding-left: var(--spacing-100);
     color: var(--color-green);
     background-color: var(--color-grey-100);
@@ -155,4 +159,24 @@
   .nav-links li a .link-text {
     font-size: var(--font-size-12);
   }
+
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .nav-links {
+    margin: var(--spacing-100) var(--spacing-200) 0 var(--spacing-200)
+  }
+  
+  .nav-links li {
+    margin: 0
+  }
+
+  .nav-links li a.active {
+    border-bottom-color: var(--color-green);
+  }
+  
+  .nav-links li a .link-text {
+    display: none; 
+  }  
 }
