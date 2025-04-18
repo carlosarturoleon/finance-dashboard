@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./Navigation.css";
 
@@ -21,9 +21,23 @@ const NAV_ITEMS = [
   { path: "/recurring", icon: RecurringIcon, text: "Recurring Bills" }
 ];
 
-const Navigation = React.memo(() => {
+const Navigation = React.memo(({ onToggleMinimize }) => {
   const [isMinimized, setIsMinimized] = useState(false);
-  const toggleMinimize = useCallback(() => setIsMinimized(prev => !prev), []);
+  
+  const toggleMinimize = useCallback(() => {
+    const newState = !isMinimized;
+    setIsMinimized(newState);
+    if (onToggleMinimize) {
+      onToggleMinimize(newState);
+    }
+  }, [isMinimized, onToggleMinimize]);
+  
+  // Notify parent component of initial state
+  useEffect(() => {
+    if (onToggleMinimize) {
+      onToggleMinimize(isMinimized);
+    }
+  }, [onToggleMinimize, isMinimized]);
 
   return (
     <nav className={`navigation ${isMinimized ? "minimized" : ""}`}>

@@ -1,279 +1,391 @@
 .dashboard {
-    padding: var(--spacing-base);
+  padding: 24px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.dashboard h1 {
+  margin-bottom: 32px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #201F24;
+}
+
+.dashboard h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #201F24;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+/* Balance Section */
+.balance-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.balance-card {
+  padding: 20px;
+  height: auto;
+  min-height: 100px;
+}
+
+.balance-title {
+  font-size: 14px;
+  margin: 0 0 6px 0;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.balance-amount, 
+.income-amount, 
+.expenses-amount {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Mid Section (Pots and Budgets) */
+.mid-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.see-details-link {
+  display: flex;
+  align-items: center;
+  color: #201F24;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.arrow-icon {
+  margin-left: 4px;
+  font-size: 18px;
+}
+
+/* Pots Section */
+.pots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.total-saved-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pot-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.card-subtitle {
+  font-size: 16px;
+  color: #696868;
+  margin: 0;
+}
+
+.card-amount {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.pots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pot-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-left: 4px solid;
+  border-radius: 4px;
+  background-color: #F8F4F0;
+}
+
+.pot-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.pot-amount {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Budget Section */
+.budgets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.budget-chart {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #626070 0% 15%,
+    #277C78 15% 25%,
+    #82C9D7 25% 65%,
+    #F2CDAC 65% 85%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.chart-center {
+  width: 60%;
+  height: 60%;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.chart-amount {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.chart-label {
+  font-size: 12px;
+  color: #696868;
+  margin: 0;
+}
+
+.budget-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.budget-category {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-color {
+  width: 4px;
+  height: 24px;
+  border-radius: 2px;
+}
+
+.category-name {
+  flex: 1;
+  font-size: 14px;
+  margin: 0;
+}
+
+.category-amount {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Transactions Section */
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #F2F2F2;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-details {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #F2F2F2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #696868;
+}
+
+.transaction-name {
+  font-size: 16px;
+  margin: 0;
+}
+
+.transaction-info {
+  text-align: right;
+}
+
+.transaction-amount {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.positive {
+  color: #277C78;
+}
+
+.negative {
+  color: #C94736;
+}
+
+.transaction-date {
+  font-size: 14px;
+  color: #696868;
+  margin: 4px 0 0 0;
+}
+
+/* Bills Section */
+.bills-summary {
+  display: flex;
+  gap: 16px;
+}
+
+.bill-summary-card {
+  flex: 1;
+  padding: 24px;
+}
+
+.bill-type {
+  font-size: 14px;
+  color: #696868;
+  margin: 0 0 8px 0;
+}
+
+.bill-amount {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .mid-section {
+    grid-template-columns: 1fr;
   }
   
-  .dashboard h1 {
-    margin-bottom: var(--spacing-xl);
-    font-size: var(--font-size-2xl);
-  }
-  
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-lg);
-  }
-  
-  .card {
-    background-color: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    box-shadow: var(--shadow-md);
-  }
-  
-  .card h2 {
-    margin-top: 0;
-    margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-lg);
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .card-header h2 {
-    margin: 0;
-  }
-  
-  .see-all-link {
-    color: var(--color-primary-green);
-    text-decoration: none;
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-  }
-  
-  /* Balance Card */
-  .balance-card {
-    grid-column: span 2;
-  }
-  
-  .balance {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    margin: var(--spacing-md) 0 var(--spacing-xl);
-  }
-  
-  .balance-details {
-    display: flex;
-    gap: var(--spacing-xl);
-  }
-  
-  .balance-details h3 {
-    font-size: var(--font-size-sm);
-    margin: 0 0 var(--spacing-sm);
-    color: var(--color-text-mid);
-  }
-  
-  .income-amount {
-    color: var(--color-positive);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin: 0;
-  }
-  
-  .expenses-amount {
-    color: var(--color-negative);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-    margin: 0;
-  }
-  
-  /* Pots Card */
-  .pots-card {
-    grid-column: span 1;
-  }
-  
-  .total-saved {
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-bold);
-    margin: var(--spacing-sm) 0 var(--spacing-md);
-  }
-  
-  .pots-preview {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-  
-  .pot-preview {
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border-left: 4px solid;
-    border-radius: var(--radius-sm);
-    background-color: var(--color-bg-light);
-  }
-  
-  .pot-name {
-    font-weight: var(--font-weight-medium);
-  }
-  
-  .pot-amount {
-    font-weight: var(--font-weight-semibold);
-  }
-  
-  /* Budgets Card */
-  .budgets-card {
-    grid-column: span 1;
-  }
-  
-  .budgets-summary {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-  }
-  
-  .budget-preview {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-  }
-  
-  .budget-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .budget-name {
-    font-weight: var(--font-weight-medium);
-  }
-  
-  .budget-amount {
-    font-weight: var(--font-weight-semibold);
-  }
-  
-  .progress-bar {
-    width: 100%;
-    height: 8px;
-    background-color: var(--color-bg-light);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-  }
-  
-  .progress-fill {
-    height: 100%;
-    border-radius: var(--radius-full);
-  }
-  
-  /* Transactions Card */
-  .transactions-card {
-    grid-column: span 2;
-  }
-  
-  .transactions-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .transactions-table th {
-    text-align: left;
-    padding: var(--spacing-md) var(--spacing-sm);
-    border-bottom: 1px solid var(--color-border);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-mid);
-    font-weight: var(--font-weight-medium);
-  }
-  
-  .transactions-table td {
-    padding: var(--spacing-md) var(--spacing-sm);
-    border-bottom: 1px solid var(--color-border);
-  }
-  
-  .transactions-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .transaction-name {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-  }
-  
-  .avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: var(--color-bg-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: var(--font-weight-semibold);
-  }
-  
-  .negative {
-    color: var(--color-negative);
-  }
-  
-  .positive {
-    color: var(--color-positive);
-  }
-  
-  /* Bills Card */
-  .bills-card {
-    grid-column: span 2;
+  .balance-section {
+    grid-template-columns: 1fr 1fr 1fr;
   }
   
   .bills-summary {
-    display: flex;
-    gap: var(--spacing-xl);
-  }
-  
-  .bill-item {
-    display: flex;
     flex-direction: column;
   }
   
-  .bill-item p {
-    margin: 0;
-    font-size: var(--font-size-sm);
-    color: var(--color-text-mid);
+  .budget-chart {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .balance-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard {
+    padding: 16px;
   }
   
-  .bill-count {
-    font-size: var(--font-size-lg) !important;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-dark) !important;
-    margin-top: var(--spacing-xs) !important;
+  .dashboard h1 {
+    font-size: 24px;
+    margin-bottom: 24px;
   }
   
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .dashboard-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .balance-card,
-    .pots-card,
-    .budgets-card,
-    .transactions-card,
-    .bills-card {
-      grid-column: span 1;
-    }
-    
-    .balance {
-      font-size: var(--font-size-2xl);
-    }
-    
-    .balance-details {
-      flex-direction: column;
-      gap: var(--spacing-md);
-    }
-    
-    .transactions-table {
-      font-size: var(--font-size-sm);
-    }
-    
-    .avatar {
-      width: 32px;
-      height: 32px;
-    }
-    
-    /* Hide certain columns on small screens */
-    .transactions-table th:nth-child(2),
-    .transactions-table td:nth-child(2) {
-      display: none;
-    }
+  .dashboard-grid {
+    gap: 32px;
   }
+  
+  .balance-amount,
+  .income-amount,
+  .expenses-amount,
+  .card-amount {
+    font-size: 24px;
+  }
+  
+  .budget-chart {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .chart-amount {
+    font-size: 18px;
+  }
+  
+  .chart-label {
+    font-size: 10px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+}

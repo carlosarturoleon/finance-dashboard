@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import Card from '../components/common/Card';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -11,11 +12,11 @@ const Dashboard = () => {
   const recentTransactions = [...transactions]
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 5);
-    
-  // Get recurring bills
-  const recurringBills = transactions.filter(transaction => transaction.recurring);
   
-  // Calculate amount spent in each budget category for current month (August 2024)
+  // Total saved in pots
+  const totalSaved = pots.reduce((total, pot) => total + pot.total, 0);
+  
+  // Calculate amount spent in each budget category for current month
   const calculateSpent = (category) => {
     const currentMonth = 8; // August
     const currentYear = 2024;
@@ -30,162 +31,170 @@ const Dashboard = () => {
       .reduce((total, transaction) => total + Math.abs(transaction.amount), 0);
   };
 
+  // Calculate total spent across all budget categories
+  const totalBudgeted = budgets.reduce((total, budget) => total + budget.maximum, 0);
+  const totalSpent = budgets.reduce((total, budget) => total + calculateSpent(budget.category), 0);
+
+  // Recurring bills stats
+  const recurringBills = transactions.filter(transaction => transaction.recurring);
+  const paidBills = 190.00; // Hardcoded for demo, should be calculated
+  const upcomingBills = 194.98; // Hardcoded for demo, should be calculated
+  const dueSoon = 59.98; // Hardcoded for demo, should be calculated
+
   return (
     <div className="dashboard">
       <h1>Overview</h1>
       
       <div className="dashboard-grid">
-        {/* Balance Card */}
-        <div className="card balance-card">
-          <h2>Current Balance</h2>
-          <p className="balance">${balance.current.toFixed(2)}</p>
+        {/* Balance Section */}
+        <div className="balance-section">
+          <Card dark className="balance-card">
+            <p className="balance-title">Current Balance</p>
+            <p className="balance-amount">${balance.current.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+          </Card>
           
-          <div className="balance-details">
-            <div className="income">
-              <h3>Income</h3>
-              <p className="income-amount">${balance.income.toFixed(2)}</p>
+          <Card className="balance-card">
+            <p className="balance-title">Income</p>
+            <p className="income-amount">${balance.income.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+          </Card>
+          
+          <Card className="balance-card">
+            <p className="balance-title">Expenses</p>
+            <p className="expenses-amount">${balance.expenses.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+          </Card>
+        </div>
+        
+        {/* Pots and Budgets Section */}
+        <div className="mid-section">
+          {/* Pots Section */}
+          <div className="section-container">
+            <div className="section-header">
+              <h2>Pots</h2>
+              <Link to="/pots" className="see-details-link">
+                See Details
+                <span className="arrow-icon">›</span>
+              </Link>
             </div>
-            <div className="expenses">
-              <h3>Expenses</h3>
-              <p className="expenses-amount">${balance.expenses.toFixed(2)}</p>
+            
+            <div className="pots-container">
+              <Card light className="total-saved-card">
+                <div className="icon-container">
+                  <div className="pot-icon">💰</div>
+                </div>
+                <p className="card-subtitle">Total Saved</p>
+                <p className="card-amount">${totalSaved.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+              </Card>
+              
+              <div className="pots-list">
+                {pots.slice(0, 4).map(pot => (
+                  <div key={pot.name} className="pot-item" style={{ borderColor: pot.theme }}>
+                    <p className="pot-name">{pot.name}</p>
+                    <p className="pot-amount">${pot.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Budgets Section */}
+          <div className="section-container">
+            <div className="section-header">
+              <h2>Budgets</h2>
+              <Link to="/budgets" className="see-details-link">
+                See Details
+                <span className="arrow-icon">›</span>
+              </Link>
+            </div>
+            
+            <div className="budgets-container">
+              <div className="budget-chart">
+                <div className="chart-center">
+                  <p className="chart-amount">${totalSpent.toFixed(0)}</p>
+                  <p className="chart-label">of ${totalBudgeted.toFixed(0)} limit</p>
+                </div>
+              </div>
+              
+              <div className="budget-categories">
+                {budgets.map(budget => {
+                  const spent = calculateSpent(budget.category);
+                  return (
+                    <div key={budget.category} className="budget-category">
+                      <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
+                      <p className="category-name">{budget.category}</p>
+                      <p className="category-amount">${budget.maximum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Pots Summary Card */}
-        <div className="card pots-card">
-          <div className="card-header">
-            <h2>Pots</h2>
-            <Link to="/pots" className="see-all-link">See Details</Link>
+        {/* Transactions Section */}
+        <div className="section-container transactions-section">
+          <div className="section-header">
+            <h2>Transactions</h2>
+            <Link to="/transactions" className="see-details-link">
+              View All
+              <span className="arrow-icon">›</span>
+            </Link>
           </div>
           
-          <div className="pots-summary">
-            <h3>Total Saved</h3>
-            <p className="total-saved">
-              ${pots.reduce((total, pot) => total + pot.total, 0).toFixed(2)}
-            </p>
-            
-            <div className="pots-preview">
-              {pots.slice(0, 3).map(pot => (
-                <div className="pot-preview" key={pot.name} style={{ borderColor: pot.theme }}>
-                  <div className="pot-name">{pot.name}</div>
-                  <div className="pot-amount">${pot.total.toFixed(2)}</div>
+          <Card noBackground>
+            <div className="transactions-list">
+              {recentTransactions.map((transaction, index) => (
+                <div key={index} className="transaction-item">
+                  <div className="transaction-details">
+                    <div className="avatar">
+                      {/* Use first letter as placeholder, you'll replace with actual images */}
+                      {transaction.name.charAt(0)}
+                    </div>
+                    <p className="transaction-name">{transaction.name}</p>
+                  </div>
+                  
+                  <div className="transaction-info">
+                    <p className={`transaction-amount ${transaction.amount < 0 ? 'negative' : 'positive'}`}>
+                      {transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </p>
+                    <p className="transaction-date">
+                      {new Date(transaction.date).toLocaleDateString('en-US', { 
+                        day: 'numeric', 
+                        month: 'short',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
         </div>
         
-        {/* Budgets Summary Card */}
-        <div className="card budgets-card">
-          <div className="card-header">
-            <h2>Budgets</h2>
-            <Link to="/budgets" className="see-all-link">See Details</Link>
-          </div>
-          
-          <div className="budgets-summary">
-            {budgets.slice(0, 2).map(budget => {
-              const spent = calculateSpent(budget.category);
-              const percentSpent = (spent / budget.maximum) * 100;
-              
-              return (
-                <div className="budget-preview" key={budget.category}>
-                  <div className="budget-header">
-                    <div className="budget-name">{budget.category}</div>
-                    <div className="budget-amount">${budget.maximum.toFixed(2)}</div>
-                  </div>
-                  <div className="progress-bar">
-                    <div 
-                      className="progress-fill" 
-                      style={{ 
-                        width: `${Math.min(100, percentSpent)}%`, 
-                        backgroundColor: budget.theme 
-                      }}
-                    ></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        
-        {/* Recent Transactions Card */}
-        <div className="card transactions-card">
-          <div className="card-header">
-            <h2>Transactions</h2>
-            <Link to="/transactions" className="see-all-link">View All</Link>
-          </div>
-          
-          <div className="recent-transactions">
-            <table className="transactions-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Category</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentTransactions.map((transaction, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="transaction-name">
-                        {/* Avatar placeholder - you'll add actual images later */}
-                        <div className="avatar">
-                          {transaction.name.charAt(0)}
-                        </div>
-                        {transaction.name}
-                      </div>
-                    </td>
-                    <td>{transaction.category}</td>
-                    <td>{new Date(transaction.date).toLocaleDateString()}</td>
-                    <td className={transaction.amount < 0 ? 'negative' : 'positive'}>
-                      {transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
-        {/* Recurring Bills Card */}
-        <div className="card bills-card">
-          <div className="card-header">
+        {/* Recurring Bills Section */}
+        <div className="section-container bills-section">
+          <div className="section-header">
             <h2>Recurring Bills</h2>
-            <Link to="/recurring" className="see-all-link">See Details</Link>
+            <Link to="/recurring" className="see-details-link">
+              See Details
+              <span className="arrow-icon">›</span>
+            </Link>
           </div>
           
           <div className="bills-summary">
-            <div className="bill-item">
-              <p>Total Bills</p>
-              <p className="bill-count">{recurringBills.length}</p>
-            </div>
+            <Card light accentColor="var(--color-green)" className="bill-summary-card">
+              <p className="bill-type">Paid Bills</p>
+              <p className="bill-amount">${paidBills.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+            </Card>
             
-            <div className="bill-item">
-              <p>Paid Bills</p>
-              <p className="bill-count">
-                {recurringBills.filter(bill => {
-                  const billDate = new Date(bill.date);
-                  const currentDate = new Date();
-                  return billDate <= currentDate;
-                }).length}
-              </p>
-            </div>
+            <Card light accentColor="var(--color-yellow)" className="bill-summary-card">
+              <p className="bill-type">Total Upcoming</p>
+              <p className="bill-amount">${upcomingBills.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+            </Card>
             
-            <div className="bill-item">
-              <p>Due Soon</p>
-              <p className="bill-count">
-                {recurringBills.filter(bill => {
-                  const billDate = new Date(bill.date);
-                  const currentDate = new Date();
-                  const fiveDaysLater = new Date();
-                  fiveDaysLater.setDate(currentDate.getDate() + 5);
-                  return billDate > currentDate && billDate <= fiveDaysLater;
-                }).length}
-              </p>
-            </div>
+            <Card light accentColor="var(--color-cyan)" className="bill-summary-card">
+              <p className="bill-type">Due Soon</p>
+              <p className="bill-amount">${dueSoon.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+            </Card>
           </div>
         </div>
       </div>

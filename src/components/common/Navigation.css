@@ -67,6 +67,7 @@
   box-sizing: border-box;
   border-left: var(--spacing-50) solid transparent;
   height: 48px;
+  font-weight: var(--font-weight-bold);
 }
 
 .nav-links li a:hover:not(.active) {
@@ -84,7 +85,7 @@
 
 .nav-links li a.active {
   color: var(--color-grey-900);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   border-left-color: var(--color-green);
   margin-left: 0;
   position: relative;
