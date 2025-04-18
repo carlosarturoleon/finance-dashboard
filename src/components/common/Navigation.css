@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-300);
+  margin-bottom: var(--spacing-300);
 }
 
 .minimize-btn {
@@ -99,6 +100,7 @@
 .nav-footer {
   margin-top: auto;
   padding: var(--spacing-300);
+  margin-bottom: var(--spacing-500);
 }
 
 /* Tablet styles */
