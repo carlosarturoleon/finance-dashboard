@@ -1,0 +1,29 @@
+.card {
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  max-width: 100%;
+  margin-bottom: 24px;
+}
+
+.card-dark {
+  background-color: #201F24;
+  color: #FFFFFF;
+}
+
+.card-light {
+  background-color: #F8F4F0;
+}
+
+.card-no-background {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Remove bottom margin from last card in a section */
+.card:last-child {
+  margin-bottom: 0;
+}
