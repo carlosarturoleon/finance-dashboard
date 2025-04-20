@@ -107,14 +107,6 @@ label {
   font-weight: var(--font-weight-bold);
 }
 
-/* Card component base styles */
-.card {
-  background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-300);
-}
-
 /* Table base styles */
 table {
   width: 100%;

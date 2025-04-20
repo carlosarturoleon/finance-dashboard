@@ -1,27 +1,25 @@
 .dashboard {
-  padding: 24px;
   max-width: 100%;
   overflow-x: hidden;
 }
 
 .dashboard h1 {
-  margin-bottom: 32px;
-  font-size: 32px;
-  font-weight: 700;
-  color: #201F24;
+  margin-bottom: var(--spacing-400);
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
 }
 
 .dashboard h2 {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
   margin: 0;
-  color: #201F24;
+  color: var(--color-text-primary);
 }
 
 .dashboard-grid {
   display: flex;
   flex-direction: column;
-  gap: 48px;
   width: 100%;
 }
 
@@ -29,132 +27,177 @@
 .balance-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: var(--spacing-300);
 }
 
 .balance-card {
-  padding: 20px;
+  padding: var(--spacing-250);
   height: auto;
   min-height: 100px;
 }
 
 .balance-title {
-  font-size: 14px;
-  margin: 0 0 6px 0;
-  font-weight: 400;
+  font-size: var(--font-size-14);
+  margin: 0 0 var(--spacing-50) 0;
+  font-weight: var(--font-weight-regular);
   opacity: 0.8;
 }
 
 .balance-amount, 
 .income-amount, 
 .expenses-amount {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
   margin: 0;
-  line-height: 1.2;
+  line-height: var(--line-height-120);
 }
 
 /* Mid Section (Pots and Budgets) */
 .mid-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  grid-template-columns: 7fr 5fr;
+  gap: var(--spacing-300);
 }
+
 
 .section-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-300);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--spacing-300);
 }
 
 .see-details-link {
   display: flex;
   align-items: center;
-  color: #201F24;
-  font-size: 14px;
-  font-weight: 700;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
 .arrow-icon {
-  margin-left: 4px;
-  font-size: 18px;
+  margin-left: var(--spacing-50);
+  font-size: var(--font-size-16);
 }
 
-/* Pots Section */
-.pots-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+/* Pots section styles */
+.pots-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-200);
 }
 
 .total-saved-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 24px;
+  padding: var(--spacing-250);
+  box-shadow: none;
+  margin: 0;
+  
 }
 
-.icon-container {
+.total-saved-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-200);
+  width: 100%;
+  align-items: center;
+}
+
+.icon-column {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.pot-icon {
-  width: 40px;
-  height: 40px;
+.content-column {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border-radius: 50%;
-  font-size: 20px;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .card-subtitle {
-  font-size: 16px;
-  color: #696868;
+  font-size: var(--font-size-16);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .card-amount {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
-.pots-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.pots-list-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: var(--spacing-200);
+  height: fit-content;
 }
-
 .pot-item {
   display: flex;
-  justify-content: space-between;
-  padding: 12px 16px;
+  flex-direction: column;
+  padding-left: var(--spacing-300);
   border-left: 4px solid;
-  border-radius: 4px;
-  background-color: #F8F4F0;
+  border-radius: var(--radius-default);
+  position: relative;
+  justify-content: center; 
+}
+
+/* Cylindrical shape for the color bars */
+.pot-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 2px; /* Makes the edges rounded */
+}
+
+.pot-item.green {
+  border-left-color: transparent; /* Hide the original border */
+}
+.pot-item.green::before {
+  background-color: var(--color-green);
+}
+
+.pot-item.cyan {
+  border-left-color: transparent;
+}
+.pot-item.cyan::before {
+  background-color: var(--color-cyan);
+}
+
+.pot-item.navy {
+  border-left-color: transparent;
+}
+.pot-item.navy::before {
+  background-color: var(--color-navy);
+}
+
+.pot-item.yellow {
+  border-left-color: transparent;
+}
+.pot-item.yellow::before {
+  background-color: var(--color-yellow);
 }
 
 .pot-name {
-  font-size: 14px;
+  font-size: var(--font-size-14);
   font-weight: 500;
-  margin: 0;
+  margin: 0 0 var(--spacing-50) 0;
 }
 
 .pot-amount {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
@@ -162,19 +205,19 @@
 .budgets-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-300);
 }
 
 .budget-chart {
   position: relative;
   width: 180px;
   height: 180px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   background: conic-gradient(
-    #626070 0% 15%,
-    #277C78 15% 25%,
-    #82C9D7 25% 65%,
-    #F2CDAC 65% 85%
+    var(--color-navy) 0% 15%,
+    var(--color-green) 15% 25%,
+    var(--color-cyan) 25% 65%,
+    var(--color-yellow) 65% 85%
   );
   display: flex;
   align-items: center;
@@ -185,8 +228,8 @@
 .chart-center {
   width: 60%;
   height: 60%;
-  background-color: white;
-  border-radius: 50%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-full);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -195,44 +238,44 @@
 }
 
 .chart-amount {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
 .chart-label {
-  font-size: 12px;
-  color: #696868;
+  font-size: var(--font-size-12);
+  color: var(--color-text-secondary);
   margin: 0;
 }
 
 .budget-categories {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--spacing-150);
 }
 
 .budget-category {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-100);
 }
 
 .category-color {
   width: 4px;
   height: 24px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 .category-name {
   flex: 1;
-  font-size: 14px;
+  font-size: var(--font-size-14);
   margin: 0;
 }
 
 .category-amount {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
@@ -246,8 +289,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
-  border-bottom: 1px solid #F2F2F2;
+  padding: var(--spacing-200) 0;
+  border-bottom: 1px solid var(--color-border-default);
 }
 
 .transaction-item:last-child {
@@ -257,23 +300,23 @@
 .transaction-details {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-200);
 }
 
 .avatar {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  background-color: #F2F2F2;
+  border-radius: var(--radius-full);
+  background-color: var(--color-background-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  color: #696868;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
 }
 
 .transaction-name {
-  font-size: 16px;
+  font-size: var(--font-size-16);
   margin: 0;
 }
 
@@ -282,45 +325,45 @@
 }
 
 .transaction-amount {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
 .positive {
-  color: #277C78;
+  color: var(--color-green);
 }
 
 .negative {
-  color: #C94736;
+  color: var(--color-red);
 }
 
 .transaction-date {
-  font-size: 14px;
-  color: #696868;
-  margin: 4px 0 0 0;
+  font-size: var(--font-size-14);
+  color: var(--color-text-secondary);
+  margin: var(--spacing-50) 0 0 0;
 }
 
 /* Bills Section */
 .bills-summary {
   display: flex;
-  gap: 16px;
+  gap: var(--spacing-200);
 }
 
 .bill-summary-card {
   flex: 1;
-  padding: 24px;
+  padding: var(--spacing-300);
 }
 
 .bill-type {
-  font-size: 14px;
-  color: #696868;
-  margin: 0 0 8px 0;
+  font-size: var(--font-size-14);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-100) 0;
 }
 
 .bill-amount {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
@@ -343,7 +386,7 @@
     height: 150px;
   }
 }
-
+/* 
 @media (max-width: 768px) {
   .balance-section {
     grid-template-columns: 1fr;
@@ -352,23 +395,23 @@
 
 @media (max-width: 576px) {
   .dashboard {
-    padding: 16px;
+    padding: var(--spacing-200);
   }
   
   .dashboard h1 {
-    font-size: 24px;
-    margin-bottom: 24px;
+    font-size: var(--font-size-20);
+    margin-bottom: var(--spacing-300);
   }
   
   .dashboard-grid {
-    gap: 32px;
+    gap: var(--spacing-400);
   }
   
   .balance-amount,
   .income-amount,
   .expenses-amount,
   .card-amount {
-    font-size: 24px;
+    font-size: var(--font-size-20);
   }
   
   .budget-chart {
@@ -377,15 +420,15 @@
   }
   
   .chart-amount {
-    font-size: 18px;
+    font-size: var(--font-size-16);
   }
   
   .chart-label {
-    font-size: 10px;
+    font-size: var(--font-size-12);
   }
   
   .avatar {
     width: 40px;
     height: 40px;
   }
-}
+} */
