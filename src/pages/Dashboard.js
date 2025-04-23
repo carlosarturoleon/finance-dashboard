@@ -3,15 +3,35 @@ import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Card from '../components/common/Card';
 import './Dashboard.css';
-import { ReactComponent as PotIcon } from '../assets/images/icon-pot.svg'
+import { ReactComponent as PotIcon } from '../assets/images/icon-pot.svg';
 
 const Dashboard = () => {
   const { data } = useData();
   const { balance, transactions, budgets, pots } = data;
   
   // Get the 5 most recent transactions
+  // Sort by date (newest first) then by time (oldest first within same day)
   const recentTransactions = [...transactions]
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .sort((a, b) => {
+      // Convert dates to objects for easier comparison
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      
+      // Extract just the date parts (year, month, day)
+      const dayA = new Date(dateA.getFullYear(), dateA.getMonth(), dateA.getDate());
+      const dayB = new Date(dateB.getFullYear(), dateB.getMonth(), dateB.getDate());
+      
+      // First compare by day (newest first)
+      const dayComparison = dayB - dayA;
+      
+      if (dayComparison !== 0) {
+        // Different days, return the day comparison (newest day first)
+        return dayComparison;
+      } else {
+        // Same day, sort by time (oldest first)
+        return dateA - dateB;
+      }
+    })
     .slice(0, 5);
   
   // Total saved in pots
@@ -140,14 +160,23 @@ const Dashboard = () => {
                 {recentTransactions.map((transaction, index) => (
                   <div key={index} className="transaction-item">
                     <div className="transaction-details">
-                      <div className="avatar">
-                        {/* If we have an avatar image path, use it, otherwise use first letter */}
-                        {transaction.avatar ? (
-                          <img src={transaction.avatar} alt={transaction.name} />
-                        ) : (
-                          transaction.name.charAt(0)
-                        )}
-                      </div>
+                      {transaction.avatar ? (
+                        <div className="avatar">
+                          <img 
+                            src={transaction.avatar} 
+                            alt={`${transaction.name}'s avatar`}
+                            onError={(e) => {
+                              // If image fails to load, replace with first letter
+                              e.target.style.display = 'none';
+                              e.target.parentNode.textContent = transaction.name.charAt(0);
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="avatar">
+                          {transaction.name.charAt(0)}
+                        </div>
+                      )}
                       <p className="transaction-name">{transaction.name}</p>
                     </div>
                     
