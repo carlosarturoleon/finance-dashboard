@@ -203,15 +203,26 @@
 
 /* Budget Section */
 .budgets-container {
-  display: flex;
+  display: grid;
   flex-direction: column;
   gap: var(--spacing-300);
+  grid-template-columns: 2fr 1fr;
+}
+
+.budget-chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 2; /* Takes up 2/3 of the vertical space */
+  padding: var(--spacing-00) 0;
+  min-height: 240px; /* Ensure minimum height for the chart area */
+  width: 100%; /* Take full width */
 }
 
 .budget-chart {
   position: relative;
-  width: 180px;
-  height: 180px;
+  width: 200px; /* Fixed size chart */
+  height: 200px;
   border-radius: var(--radius-full);
   background: conic-gradient(
     var(--color-navy) 0% 15%,
@@ -222,7 +233,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
+  margin: 0 auto; /* Center horizontally */
 }
 
 .chart-center {
@@ -255,20 +266,35 @@
   gap: var(--spacing-150);
 }
 
+/* CSS changes for budget category */
 .budget-category {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-100);
+  position: relative;
+  padding-left: var(--spacing-200);
+  margin-bottom: var(--spacing-100);
 }
 
 .category-color {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 4px;
-  height: 24px;
   border-radius: var(--radius-sm);
+  height: 100%; /* Extend to full height of the category */
+}
+
+.category-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-50);
+  padding: var(--spacing-50) 0;
 }
 
 .category-name {
-  flex: 1;
   font-size: var(--font-size-14);
   margin: 0;
 }
@@ -277,6 +303,7 @@
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-bold);
   margin: 0;
+  color: var(--color-text-primary);
 }
 
 /* Transactions Section */

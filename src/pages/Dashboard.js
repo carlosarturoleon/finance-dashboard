@@ -200,37 +200,42 @@ const Dashboard = () => {
           
           {/* Right Column: Budgets and Recurring Bills */}
           <div className="column-container">
-            {/* Budgets Section */}
-            <Card light className="section-card">
-              <div className="section-header">
-                <h2>Budgets</h2>
-                <Link to="/budgets" className="see-details-link">
-                  See Details
-                  <span className="arrow-icon">›</span>
-                </Link>
-              </div>
-              
-              <div className="budgets-container">
-                <div className="budget-chart-container">
-                  <div className="budget-chart">
-                    <div className="chart-center">
-                      <p className="chart-amount">${totalSpent.toFixed(0)}</p>
-                      <p className="chart-label">of ${totalBudgeted.toFixed(0)} limit</p>
-                    </div>
+            
+          {/* Budgets Section */}
+          <Card light className="section-card">
+            <div className="section-header">
+              <h2>Budgets</h2>
+              <Link to="/budgets" className="see-details-link">
+                See Details
+                <span className="arrow-icon">›</span>
+              </Link>
+            </div>
+            
+            <div className="budgets-container">
+              <div className="budget-chart-container">
+                <div className="budget-chart">
+                  <div className="chart-center">
+                    <p className="chart-amount">${totalSpent.toFixed(0)}</p>
+                    <p className="chart-label">of ${totalBudgeted.toFixed(0)} limit</p>
                   </div>
                 </div>
-                
-                <div className="budget-categories">
-                  {budgets.map(budget => (
-                    <div key={budget.category} className="budget-category">
-                      <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
+              </div>
+              
+              <div className="budget-categories-container">
+              {/* Updated JSX for the budget categories */}
+              <div className="budget-categories">
+                {budgets.map(budget => (
+                  <div key={budget.category} className="budget-category">
+                    <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
+                    <div className="category-info">
                       <p className="category-name">{budget.category}</p>
                       <p className="category-amount">${budget.maximum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-            </Card>
+                  </div>
+                ))}
+              </div>              </div>
+            </div>
+          </Card>
             
             {/* Recurring Bills Section */}
             <Card light className="section-card">
