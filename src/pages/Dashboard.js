@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Card from '../components/common/Card';
@@ -55,6 +55,39 @@ const Dashboard = () => {
   // Calculate total spent across all budget categories
   const totalBudgeted = budgets.reduce((total, budget) => total + budget.maximum, 0);
   const totalSpent = budgets.reduce((total, budget) => total + calculateSpent(budget.category), 0);
+
+  // Calculate percentage spent for each budget category and generate dynamic chart gradient
+  const budgetsWithPercentages = useMemo(() => {
+    // Calculate the percentage of each budget relative to the total budget
+    return budgets.map(budget => ({
+      ...budget,
+      spent: calculateSpent(budget.category),
+      percentage: (budget.maximum / totalBudgeted) * 100
+    }));
+  }, [budgets, totalBudgeted]);
+
+  // Generate dynamic conic gradient for the chart
+  const chartGradient = useMemo(() => {
+    let gradient = 'conic-gradient(';
+    let currentPercentage = 0;
+    
+    budgetsWithPercentages.forEach((budget, index) => {
+      const nextPercentage = currentPercentage + budget.percentage;
+      
+      // Add to gradient string
+      gradient += `${budget.theme} ${currentPercentage}% ${nextPercentage}%`;
+      
+      // Add comma if not the last item
+      if (index < budgetsWithPercentages.length - 1) {
+        gradient += ', ';
+      }
+      
+      currentPercentage = nextPercentage;
+    });
+    
+    gradient += ')';
+    return gradient;
+  }, [budgetsWithPercentages]);
 
   // Recurring bills stats - calculate from data instead of hardcoding
   const recurringBills = transactions.filter(transaction => transaction.recurring);
@@ -213,7 +246,7 @@ const Dashboard = () => {
             
             <div className="budgets-container">
               <div className="budget-chart-container">
-                <div className="budget-chart">
+                <div className="budget-chart" style={{ background: chartGradient }}>
                   <div className="chart-center">
                     <p className="chart-amount">${totalSpent.toFixed(0)}</p>
                     <p className="chart-label">of ${totalBudgeted.toFixed(0)} limit</p>
@@ -222,18 +255,20 @@ const Dashboard = () => {
               </div>
               
               <div className="budget-categories-container">
-              {/* Updated JSX for the budget categories */}
-              <div className="budget-categories">
-                {budgets.map(budget => (
-                  <div key={budget.category} className="budget-category">
-                    <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
-                    <div className="category-info">
-                      <p className="category-name">{budget.category}</p>
-                      <p className="category-amount">${budget.maximum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                <div className="budget-categories">
+                  {budgetsWithPercentages.map(budget => (
+                    <div key={budget.category} className="budget-category">
+                      <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
+                      <div className="category-info">
+                        <p className="category-name">{budget.category}</p>
+                        <p className="category-amount">
+                          ${budget.maximum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>              </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </Card>
             
@@ -249,18 +284,24 @@ const Dashboard = () => {
               
               <div className="bills-container">
                 <Card noBackground accentColor="var(--color-green)" className="bill-summary-card">
-                  <p className="bill-type">Paid Bills</p>
-                  <p className="bill-amount">${paidBills.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  <div className="bill-content-wrapper">
+                    <p className="bill-type">Paid Bills</p>
+                    <p className="bill-amount">${paidBills.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  </div>  
                 </Card>
                 
                 <Card noBackground accentColor="var(--color-yellow)" className="bill-summary-card">
-                  <p className="bill-type">Total Upcoming</p>
-                  <p className="bill-amount">${upcomingBillsTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  <div className="bill-content-wrapper">
+                    <p className="bill-type">Total Upcoming</p>
+                    <p className="bill-amount">${upcomingBillsTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  </div>  
                 </Card>
                 
                 <Card noBackground accentColor="var(--color-cyan)" className="bill-summary-card">
-                  <p className="bill-type">Due Soon</p>
-                  <p className="bill-amount">${dueSoon.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  <div className="bill-content-wrapper">
+                    <p className="bill-type">Due Soon</p>
+                    <p className="bill-amount">${dueSoon.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                  </div>  
                 </Card>
               </div>
             </Card>
