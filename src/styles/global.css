@@ -47,7 +47,6 @@ p {
 }
 
 a {
-  color: var(--color-green);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
