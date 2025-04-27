@@ -140,17 +140,22 @@
   gap: var(--spacing-200);
   height: fit-content;
 }
+
+/* Add this to your existing Dashboard.css file */
+
+/* Updated pot-item styles to use CSS variables for dynamic theming */
 .pot-item {
   display: flex;
   flex-direction: column;
   padding-left: var(--spacing-300);
   border-left: 4px solid;
+  border-left-color: transparent; /* Hide the original border */
   border-radius: var(--radius-default);
   position: relative;
   justify-content: center; 
 }
 
-/* Cylindrical shape for the color bars */
+/* Cylindrical shape for the color bars using CSS variables */
 .pot-item::before {
   content: "";
   position: absolute;
@@ -159,6 +164,19 @@
   bottom: 0;
   width: 5px;
   border-radius: 2px; /* Makes the edges rounded */
+  background-color: var(--pot-color, var(--color-green)); /* Use the CSS variable with a fallback */
+}
+
+/* Updated category-color to use CSS variables */
+.category-color {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: var(--radius-sm);
+  height: 100%;
+  background-color: var(--category-color, var(--color-text-primary)); /* Use the CSS variable with a fallback */
 }
 
 .pot-item.green {
