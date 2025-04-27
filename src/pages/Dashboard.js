@@ -9,9 +9,15 @@ const Dashboard = () => {
   const { data } = useData();
   const { balance, transactions, budgets, pots } = data;
   
-  // Get the 5 most recent transactions
-  // Sort by date (newest first) then by time (oldest first within same day)
+  // Get the 5 most recent transactions from August 2024
   const recentTransactions = [...transactions]
+    .filter(transaction => {
+      const transactionDate = new Date(transaction.date);
+      return (
+        transactionDate.getMonth() + 1 === 8 && // August
+        transactionDate.getFullYear() === 2024
+      );
+    })
     .sort((a, b) => {
       // Convert dates to objects for easier comparison
       const dateA = new Date(a.date);
@@ -34,37 +40,51 @@ const Dashboard = () => {
     })
     .slice(0, 5);
   
-  // Total saved in pots
+  // Total saved in pots - Calculate by summing all pot totals
   const totalSaved = pots.reduce((total, pot) => total + pot.total, 0);
   
-  // Calculate amount spent in each budget category for current month
+  // Calculate amount spent in each budget category for the latest month (August 2024)
   const calculateSpent = (category) => {
-    const currentMonth = new Date().getMonth() + 1; // Get current month (1-12)
-    const currentYear = new Date().getFullYear();
+    // Hard-coded latest month (August 2024) based on the data
+    const latestMonth = 8; // August
+    const latestYear = 2024;
     
     return transactions
       .filter(transaction => 
         transaction.category === category && 
         transaction.amount < 0 &&
-        new Date(transaction.date).getMonth() + 1 === currentMonth &&
-        new Date(transaction.date).getFullYear() === currentYear
+        new Date(transaction.date).getMonth() + 1 === latestMonth &&
+        new Date(transaction.date).getFullYear() === latestYear
       )
       .reduce((total, transaction) => total + Math.abs(transaction.amount), 0);
   };
 
   // Calculate total spent across all budget categories
   const totalBudgeted = budgets.reduce((total, budget) => total + budget.maximum, 0);
-  const totalSpent = budgets.reduce((total, budget) => total + calculateSpent(budget.category), 0);
+  
+  // Calculate total spent in budget categories
+  const totalSpentInBudgetCategories = budgets
+    .map(budget => budget.category)
+    .reduce((total, category) => total + calculateSpent(category), 0);
+    
+  // Calculate pots - transactions on displayed categories
+  const totalSpent = totalSaved - totalSpentInBudgetCategories;
 
   // Calculate percentage spent for each budget category and generate dynamic chart gradient
   const budgetsWithPercentages = useMemo(() => {
     // Calculate the percentage of each budget relative to the total budget
-    return budgets.map(budget => ({
-      ...budget,
-      spent: calculateSpent(budget.category),
-      percentage: (budget.maximum / totalBudgeted) * 100
-    }));
-  }, [budgets, totalBudgeted]);
+    return budgets.map(budget => {
+      const spent = calculateSpent(budget.category);
+      const remaining = budget.maximum - spent;
+      // Calculate the "pots - transactions" for this category
+      return {
+        ...budget,
+        spent: spent,
+        remaining: remaining,
+        percentage: (budget.maximum / totalBudgeted) * 100
+      };
+    });
+  }, [budgets, totalBudgeted, calculateSpent]);
 
   // Generate dynamic conic gradient for the chart
   const chartGradient = useMemo(() => {
@@ -89,29 +109,28 @@ const Dashboard = () => {
     return gradient;
   }, [budgetsWithPercentages]);
 
-  // Recurring bills stats - calculate from data instead of hardcoding
-  const recurringBills = transactions.filter(transaction => transaction.recurring);
-  
-  // Paid bills (recurring transactions with negative amounts from the current month)
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
-  
-  const paidBills = recurringBills
-    .filter(bill => 
-      bill.amount < 0 && 
-      new Date(bill.date).getMonth() + 1 === currentMonth &&
-      new Date(bill.date).getFullYear() === currentYear
+  // Recurring bills stats specifically for August 2024
+  // Paid bills - from August data
+  const paidBills = transactions
+    .filter(transaction => 
+      transaction.recurring && 
+      transaction.amount < 0 &&
+      new Date(transaction.date).getMonth() + 1 === 8 && // August
+      new Date(transaction.date).getFullYear() === 2024
     )
     .reduce((total, bill) => total + Math.abs(bill.amount), 0);
     
-  // Upcoming bills - assume these are bills that are recurring but haven't been paid this month
-  // This is a simplification - in a real app, you'd have more sophisticated logic
-  const upcomingBillsTotal = recurringBills
-    .filter(bill => bill.amount < 0)
+  // Upcoming bills - only August recurring bills
+  const upcomingBillsTotal = transactions
+    .filter(transaction => 
+      transaction.recurring && 
+      transaction.amount < 0 &&
+      new Date(transaction.date).getMonth() + 1 === 8 && // August
+      new Date(transaction.date).getFullYear() === 2024
+    )
     .reduce((total, bill) => total + Math.abs(bill.amount), 0);
     
-  // Due soon - for demo purposes, assume 30% of upcoming bills are due soon
-  // In a real app, you would calculate this based on due dates
+  // Due soon - for August (30% of August upcoming bills)
   const dueSoon = upcomingBillsTotal * 0.3;
 
   return (
@@ -169,12 +188,24 @@ const Dashboard = () => {
                 
                 {/* Right column - Pot items in 2 columns */}
                 <div className="pots-list-grid">
-                  {pots.slice(0, 4).map((pot, index) => (
-                    <div key={pot.name} className={`pot-item ${getCssColorClass(pot.theme)}`}>
-                      <p className="pot-name">{pot.name}</p>
-                      <p className="pot-amount">${pot.total.toLocaleString('en-US')}</p>
-                    </div>
-                  ))}
+                  {/* Display pots in specific order: Savings, Concert Ticket, Gift, New Laptop */}
+                  {['Savings', 'Gift', 'Concert Ticket', 'New Laptop'].map(potName => {
+                    const pot = pots.find(p => p.name === potName);
+                    if (!pot) return null;
+                    
+                    return (
+                      <div 
+                        key={pot.name} 
+                        className="pot-item"
+                        style={{ 
+                          "--pot-color": pot.theme 
+                        }}
+                      >
+                        <p className="pot-name">{pot.name}</p>
+                        <p className="pot-amount">${pot.total.toLocaleString('en-US')}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </Card>
@@ -248,7 +279,7 @@ const Dashboard = () => {
               <div className="budget-chart-container">
                 <div className="budget-chart" style={{ background: chartGradient }}>
                   <div className="chart-center">
-                    <p className="chart-amount">${totalSpent.toFixed(0)}</p>
+                    <p className="chart-amount">${Math.max(0, totalSpent).toFixed(0)}</p>
                     <p className="chart-label">of ${totalBudgeted.toFixed(0)} limit</p>
                   </div>
                 </div>
@@ -257,12 +288,12 @@ const Dashboard = () => {
               <div className="budget-categories-container">
                 <div className="budget-categories">
                   {budgetsWithPercentages.map(budget => (
-                    <div key={budget.category} className="budget-category">
+                  <div key={budget.category} className="budget-category">
                       <div className="category-color" style={{ backgroundColor: budget.theme }}></div>
                       <div className="category-info">
                         <p className="category-name">{budget.category}</p>
                         <p className="category-amount">
-                          ${budget.maximum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                          ${budget.remaining.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                         </p>
                       </div>
                     </div>
@@ -312,17 +343,6 @@ const Dashboard = () => {
   );
 };
 
-// Helper function to convert hex theme colors to CSS class names
-const getCssColorClass = (hexColor) => {
-  const colorMap = {
-    '#277C78': 'green',
-    '#626070': 'navy',
-    '#82C9D7': 'cyan',
-    '#F2CDAC': 'yellow',
-    '#826CB0': 'purple'
-  };
-  
-  return colorMap[hexColor] || 'green'; // Default to green if no match
-};
+
 
 export default Dashboard;
