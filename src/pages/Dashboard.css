@@ -369,76 +369,52 @@
 }
 
 /* Responsive Adjustments */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .mid-section {
     grid-template-columns: 1fr;
   }
-  
-  .balance-section {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  
-  .bills-summary {
-    flex-direction: column;
+ 
+  .budgets-container {
+    grid-template-columns: 7fr 1fr;
   }
   
   .budget-chart {
-    width: 150px;
-    height: 150px;
+    width: 270px;
+    height: 270px;
+  }
+
+  .pots-grid {
+    grid-template-columns: 13fr 19fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .balance-section {
     grid-template-columns: 1fr;
+    gap: 0;
+
   }
   
-  .pots-grid,
-  .pots-list-grid {
+  .pots-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pots-list-grid {
+    grid-template-columns: 1fr 1fr;
   }
   
   .budgets-container {
     grid-template-columns: 1fr;
+    margin: 0; 
   }
-}
 
-@media (max-width: 576px) {
-  .dashboard {
-    padding: var(--spacing-200);
+  .budget-categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
-  
-  .dashboard h1 {
-    font-size: var(--font-size-20);
-    margin-bottom: var(--spacing-300);
-  }
-  
-  .dashboard-grid {
-    gap: var(--spacing-400);
-  }
-  
-  .balance-amount,
-  .income-amount,
-  .expenses-amount,
-  .card-amount {
-    font-size: var(--font-size-20);
-  }
-  
-  .budget-chart {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .chart-amount {
-    font-size: var(--font-size-16);
-  }
-  
-  .chart-label {
-    font-size: var(--font-size-12);
-  }
-  
-  .avatar {
-    width: 40px;
-    height: 40px;
-  }
+
+  .bill-summary-card:last-child {
+    margin-bottom: 0;
+  }  
+
 }

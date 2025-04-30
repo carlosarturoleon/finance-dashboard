@@ -23,15 +23,24 @@
   width: calc(100% - 88px);
 }
 
-/* Media query for mobile */
-@media (max-width: 768px) {
+/* Media query for tablet */
+@media (max-width: 1024px) {
   .app {
     flex-direction: column;
   }
   
-  .main-content {
+  .main-content,
+  .main-content.sidebar-minimized {
     margin-left: 0;
     width: 100%;
+    padding: var(--spacing-300);
+    padding-bottom: 88px; /* Space for the tablet navigation */
+  }
+}
+
+/* Media query for mobile */
+@media (max-width: 767px) {
+  .main-content {
     padding: var(--spacing-200) var(--spacing-150);
     padding-bottom: 80px; /* Space for the mobile navigation */
   }
