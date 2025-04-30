@@ -24,3 +24,9 @@
   padding: 0;
   box-shadow: none;
 }
+
+@media (max-width: 767px) {
+  .card {
+    margin-bottom: var(--spacing-200);
+  }
+}
