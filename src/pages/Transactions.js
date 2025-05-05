@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useData } from '../context/DataContext';
 import { Card } from '../components/common';
 import './Transactions.css';
@@ -25,6 +25,61 @@ const Transactions = () => {
     currentPage,
     resultsPerPage
   );
+
+  const CustomDropdown = ({ value, onChange, options, placeholder }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+  
+    const selectedOption = options.find(option => option.value === value);
+  
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+  
+    const handleOptionClick = (optionValue) => {
+      onChange(optionValue);
+      setIsOpen(false);
+    };
+  
+    return (
+      <div className="custom-dropdown" ref={dropdownRef}>
+        <div className="dropdown-wrapper">
+          <div 
+            className="selected-option" 
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span>{selectedOption ? selectedOption.label : placeholder}</span>
+            <CaretDownIcon />
+          </div>
+          
+          <div className={`dropdown-menu ${isOpen ? 'active' : ''}`}>
+            {options.map(option => (
+              <div className={`dropdown-menu ${isOpen ? 'active' : ''}`}>
+                {options.map(option => (
+                  <div
+                    key={option.value}
+                    className={`dropdown-item ${value === option.value ? 'selected' : ''}`}
+                    onClick={() => handleOptionClick(option.value)}
+                  >
+                    {option.label}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };  
 
   const sortedTransactions = useMemo(() => {
     const sortTransactionsWithinSameDay = (transactionsToSort) => {
@@ -166,41 +221,23 @@ const Transactions = () => {
           <div className="filter-controls">
             <div className="sort-filter">
               <span className="filter-label">Sort by</span>
-              <div className="dropdown">
-                <select
-                  id="sort"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="dropdown-select"
-                >
-                  {sortOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-                <CaretDownIcon className="dropdown-icon" />
-              </div>
+              <CustomDropdown
+                value={sortBy}
+                onChange={setSortBy}
+                options={sortOptions}
+                placeholder="Select sort"
+              />
             </div>
-            
+
             <div className="category-filter">
               <span className="filter-label">Category</span>
-              <div className="dropdown">
-                <select
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="dropdown-select"
-                >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-                <CaretDownIcon className="dropdown-icon" />
-              </div>
-            </div>
+              <CustomDropdown
+                value={category}
+                onChange={setCategory}
+                options={categories.map(cat => ({ value: cat, label: cat }))}
+                placeholder="Select category"
+              />
+            </div>            
           </div>
         </div>
         
