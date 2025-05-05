@@ -168,6 +168,7 @@
   /* Table styles */
   .transactions-card {
     padding: var(--spacing-400);
+    margin-bottom: 0;
   }
   
   .transactions-table-container {
