@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
 import { Card } from '../components/common';
 import './Transactions.css';
@@ -16,7 +16,6 @@ const Transactions = () => {
   const [category, setCategory] = useState('All Transactions');
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsPerPage] = useState(10);
-  const [orderedTransactions, setOrderedTransactions] = useState([]);
 
   // Get filtered and paginated transactions
   const { transactions, totalPages, totalCount } = getFilteredTransactions(
@@ -27,13 +26,11 @@ const Transactions = () => {
     resultsPerPage
   );
 
-  // Secondary sort: within each day, sort transactions from oldest to newest
-  useEffect(() => {
-    const sortTransactionsWithinSameDay = (transactions) => {
-      // Group transactions by date (just the day part, not time)
+  const sortedTransactions = useMemo(() => {
+    const sortTransactionsWithinSameDay = (transactionsToSort) => {
       const transactionsByDate = {};
       
-      transactions.forEach(transaction => {
+      transactionsToSort.forEach(transaction => {
         const date = new Date(transaction.date);
         const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
         
@@ -44,28 +41,22 @@ const Transactions = () => {
         transactionsByDate[dateKey].push(transaction);
       });
       
-      // For each date group, sort transactions by time (oldest to newest)
       Object.keys(transactionsByDate).forEach(dateKey => {
         transactionsByDate[dateKey].sort((a, b) => {
           const timeA = new Date(a.date).getTime();
           const timeB = new Date(b.date).getTime();
-          return timeA - timeB; // Ascending order (oldest first)
+          return timeA - timeB;
         });
       });
       
-      // Reconstruct the array while maintaining the primary sort order
       const result = [];
       const sortedDateKeys = Object.keys(transactionsByDate).sort((a, b) => {
-        // Sort date keys based on primary sort criteria
-        // For 'latest', sort in descending order
         if (sortBy === 'latest') {
           return new Date(b.split('-').join('/')) - new Date(a.split('-').join('/'));
         }
-        // For 'oldest', sort in ascending order
         if (sortBy === 'oldest') {
           return new Date(a.split('-').join('/')) - new Date(b.split('-').join('/'));
         }
-        // Default to descending order
         return new Date(b.split('-').join('/')) - new Date(a.split('-').join('/'));
       });
       
@@ -77,14 +68,9 @@ const Transactions = () => {
       
       return result;
     };
-
-    setOrderedTransactions(sortTransactionsWithinSameDay(transactions));
+    
+    return sortTransactionsWithinSameDay(transactions);
   }, [transactions, sortBy]);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search, sortBy, category]);
 
   // Categories array from data
   const categories = [
@@ -229,7 +215,7 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody>
-              {orderedTransactions.map((transaction, index) => (
+              {sortedTransactions.map((transaction, index) => (
                 <tr key={`${transaction.name}-${transaction.date}-${index}`}>
                   <td className="recipient-column">
                     <div className="transaction-name">
