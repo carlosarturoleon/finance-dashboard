@@ -69,7 +69,7 @@
   
   .filter-label {
     font-size: var(--font-size-14);
-    color: var(--color-text-primary);
+    color: var(--color-text-secondary);
   }
   
   /* Dropdown styles */
