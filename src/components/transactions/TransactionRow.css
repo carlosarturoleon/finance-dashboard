@@ -1,0 +1,70 @@
+/* TransactionRow Component Styles */
+.transaction-row {
+    transition: background-color 0.15s ease;
+  }
+  
+  .transaction-row:hover {
+    background-color: var(--color-grey-50);
+  }
+  
+  .transaction-name {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-200);
+  }
+  
+  .transaction-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-beige-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .transaction-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .transaction-name__text {
+    font-weight: var(--font-weight-bold);
+    word-break: break-word;
+  }
+  
+  .transaction-category,
+  .transaction-date {
+    font-size: var(--font-size-12);
+    color: var(--color-text-secondary);
+  }
+  
+  .transaction-amount {
+    text-align: right;
+    font-weight: var(--font-weight-bold);
+  }
+  
+  .transaction-amount--positive {
+    color: var(--color-green);
+  }
+  
+  .transaction-amount--negative {
+    color: var(--color-text-primary);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767px) {
+    .transaction-avatar {
+        width: 40px; /* Adjust this if you have a different mobile size in Dashboard */
+        height: 40px;
+    }
+    
+    .transaction-name {
+      gap: var(--spacing-150);
+    }
+  }
