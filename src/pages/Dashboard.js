@@ -4,6 +4,7 @@ import { useData } from '../context/DataContext';
 import Card from '../components/common/Card';
 import './Dashboard.css';
 import { ReactComponent as PotIcon } from '../assets/images/icon-pot.svg';
+import { formatDate } from '../utils/dateUtils';
 
 const Dashboard = () => {
   const { data } = useData();
@@ -266,11 +267,7 @@ const Dashboard = () => {
                         {transaction.amount < 0 ? '-' : '+'}${formatCurrency(Math.abs(transaction.amount))}
                       </p>
                       <p className="transaction-date">
-                        {new Date(transaction.date).toLocaleDateString('en-US', { 
-                          day: 'numeric', 
-                          month: 'short',
-                          year: 'numeric'
-                        })}
+                        {formatDate(transaction.date)}
                       </p>
                     </div>
                   </div>
