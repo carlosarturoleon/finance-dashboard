@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useData } from '../context/DataContext';
 import { Card } from '../components/common';
 import CustomDropdown from '../components/common/CustomDropdown';
@@ -11,6 +11,8 @@ import { ReactComponent as SearchIcon } from '../assets/images/icon-search.svg';
 import { ReactComponent as CaretDownIcon } from '../assets/images/icon-caret-down.svg';
 import { ReactComponent as CaretLeftIcon } from '../assets/images/icon-caret-left.svg';
 import { ReactComponent as CaretRightIcon } from '../assets/images/icon-caret-right.svg';
+import { ReactComponent as SortIcon } from '../assets/images/icon-sort-mobile.svg';
+import { ReactComponent as FilterIcon } from '../assets/images/icon-filter-mobile.svg';
 
 // Constants
 const RESULTS_PER_PAGE = 10;
@@ -22,6 +24,28 @@ const Transactions = () => {
   const [sortBy, setSortBy] = useState('latest');
   const [category, setCategory] = useState('All Transactions');
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Mobile filter modal states
+  const [showSortModal, setShowSortModal] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile view
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, sortBy, category]);
 
   // Get filtered and paginated transactions
   const { transactions, totalPages, totalCount } = getFilteredTransactions(
@@ -100,6 +124,49 @@ const Transactions = () => {
     { value: 'lowest', label: 'Lowest' }
   ];
 
+  const categoryOptions = categories.map(cat => ({ value: cat, label: cat }));
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setShowSortModal(false);
+    setShowFilterModal(false);
+  };
+
+  // Handle sort selection in modal
+  const handleSortSelect = (value) => {
+    setSortBy(value);
+    setShowSortModal(false);
+  };
+
+  // Handle category selection in modal
+  const handleCategorySelect = (value) => {
+    setCategory(value);
+    setShowFilterModal(false);
+  };
+
+  // Get current sort/filter labels for mobile buttons
+  const currentSortLabel = sortOptions.find(option => option.value === sortBy)?.label || 'Latest';
+  const currentCategoryLabel = category.length > 12 ? `${category.substring(0, 12)}...` : category;
+
+  // Handle keyboard events for modals
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleModalClose();
+      }
+    };
+
+    if (showSortModal || showFilterModal) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showSortModal, showFilterModal]);
+
   return (
     <div className="transactions">
       <h1 className="transactions__heading">Transactions</h1>
@@ -118,6 +185,7 @@ const Transactions = () => {
             <SearchIcon className="transactions__search-icon" aria-hidden="true" />
           </div>
           
+          {/* Desktop Filter Controls */}
           <div className="transactions__filter-controls">
             <div className="transactions__filter">
               <CustomDropdown
@@ -134,12 +202,31 @@ const Transactions = () => {
               <CustomDropdown
                 value={category}
                 onChange={setCategory}
-                options={categories.map(cat => ({ value: cat, label: cat }))}
+                options={categoryOptions}
                 placeholder="Select category"
                 label="Category"
                 CaretIcon={CaretDownIcon}
               />
             </div>            
+          </div>
+
+          {/* Mobile Filter Buttons */}
+          <div className="transactions__mobile-filters">
+            <button
+              className="transactions__mobile-filter-btn"
+              onClick={() => setShowSortModal(true)}
+              aria-label={`Sort by ${currentSortLabel}`}
+            >
+              <SortIcon aria-hidden="true" />
+            </button>
+            
+            <button
+              className="transactions__mobile-filter-btn"
+              onClick={() => setShowFilterModal(true)}
+              aria-label={`Filter by ${currentCategoryLabel}`}
+            >
+              <FilterIcon aria-hidden="true" />
+            </button>
           </div>
         </div>
         
@@ -184,6 +271,84 @@ const Transactions = () => {
           />
         )}
       </Card>
+
+      {/* Sort Modal for Mobile */}
+      <div 
+        className={`transactions__filter-modal ${showSortModal ? 'transactions__filter-modal--active' : ''}`}
+        onClick={(e) => e.target === e.currentTarget && handleModalClose()}
+      >
+        <div className="transactions__filter-modal-content">
+          <div className="transactions__filter-modal-header">
+            <h3 className="transactions__filter-modal-title">Sort by</h3>
+            <button 
+              className="transactions__filter-modal-close"
+              onClick={handleModalClose}
+              aria-label="Close sort modal"
+            >
+              ×
+            </button>
+          </div>
+          
+          <div className="transactions__filter-modal-group">
+            {sortOptions.map(option => (
+              <div 
+                key={option.value}
+                className={`transactions__filter-option ${sortBy === option.value ? 'selected' : ''}`}
+                onClick={() => handleSortSelect(option.value)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSortSelect(option.value);
+                  }
+                }}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Category Filter Modal for Mobile */}
+      <div 
+        className={`transactions__filter-modal ${showFilterModal ? 'transactions__filter-modal--active' : ''}`}
+        onClick={(e) => e.target === e.currentTarget && handleModalClose()}
+      >
+        <div className="transactions__filter-modal-content">
+          <div className="transactions__filter-modal-header">
+            <h3 className="transactions__filter-modal-title">Filter by Category</h3>
+            <button 
+              className="transactions__filter-modal-close"
+              onClick={handleModalClose}
+              aria-label="Close filter modal"
+            >
+              ×
+            </button>
+          </div>
+          
+          <div className="transactions__filter-modal-group">
+            {categoryOptions.map(option => (
+              <div 
+                key={option.value}
+                className={`transactions__filter-option ${category === option.value ? 'selected' : ''}`}
+                onClick={() => handleCategorySelect(option.value)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCategorySelect(option.value);
+                  }
+                }}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

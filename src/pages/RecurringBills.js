@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
 import './RecurringBills.css';
+import { formatDateShort } from '../utils/dateUtils';
 
 const RecurringBills = () => {
   const { getRecurringBills, data } = useData();
@@ -199,7 +200,7 @@ const RecurringBills = () => {
               
               <div className="bill-date">
                 <span className="date-text">
-                  {new Date(bill.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                  {formatDateShort(bill.date)}
                 </span>
                 <span className="status">
                   {isBillPaid(bill) ? 'Paid' : isBillDueSoon(bill) ? 'Due Soon' : 'Upcoming'}

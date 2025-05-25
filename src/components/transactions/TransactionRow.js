@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { formatDate } from '../../utils/dateUtils';
 import './TransactionRow.css';
 
 const TransactionRow = ({ transaction, index }) => {
-  // Format date nicely
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      day: 'numeric', 
-      month: 'short',
-      year: 'numeric'
-    });
-  };
+  const formattedAmount = `${transaction.amount < 0 ? '-' : '+'}$${Math.abs(transaction.amount).toFixed(2)}`;
+  const amountClass = transaction.amount < 0 ? 'transaction-amount--negative' : 'transaction-amount--positive';
   
   return (
     <tr className="transaction-row">
-      <td className="transactions__table-cell transactions__table-cell--recipient">
+      <td 
+        className={`transactions__table-cell transactions__table-cell--recipient ${amountClass}`}
+        data-amount={formattedAmount}
+      >
         <div className="transaction-name">
           <div className="transaction-avatar">
             {transaction.avatar ? (
@@ -34,15 +31,17 @@ const TransactionRow = ({ transaction, index }) => {
           <span className="transaction-name__text">{transaction.name}</span>
         </div>
       </td>
-      <td className="transactions__table-cell transactions__table-cell--category transaction-category">
+      <td 
+        className="transactions__table-cell transactions__table-cell--category transaction-category"
+        data-date={formatDate(transaction.date)}
+      >
         {transaction.category}
       </td>
       <td className="transactions__table-cell transactions__table-cell--date transaction-date">
         {formatDate(transaction.date)}
       </td>
-      <td className={`transactions__table-cell transactions__table-cell--amount transaction-amount ${
-        transaction.amount < 0 ? 'transaction-amount--negative' : 'transaction-amount--positive'}`}>
-        {transaction.amount < 0 ? '-' : '+'}${Math.abs(transaction.amount).toFixed(2)}
+      <td className={`transactions__table-cell transactions__table-cell--amount transaction-amount ${amountClass}`}>
+        {formattedAmount}
       </td>
     </tr>
   );

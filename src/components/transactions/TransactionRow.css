@@ -1,19 +1,19 @@
 /* TransactionRow Component Styles */
 .transaction-row {
     transition: background-color 0.15s ease;
-  }
-  
-  .transaction-row:hover {
+}
+
+.transaction-row:hover {
     background-color: var(--color-grey-50);
-  }
-  
-  .transaction-name {
+}
+
+.transaction-name {
     display: flex;
     align-items: center;
     gap: var(--spacing-200);
-  }
-  
-  .transaction-avatar {
+}
+
+.transaction-avatar {
     width: 48px;
     height: 48px;
     border-radius: var(--radius-full);
@@ -25,46 +25,124 @@
     color: var(--color-white);
     overflow: hidden;
     flex-shrink: 0;
-  }
+}
 
-  .transaction-avatar img {
+.transaction-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-  
-  .transaction-name__text {
+}
+
+.transaction-name__text {
     font-weight: var(--font-weight-bold);
     word-break: break-word;
-  }
-  
-  .transaction-category,
-  .transaction-date {
+}
+
+.transaction-category,
+.transaction-date {
     font-size: var(--font-size-12);
     color: var(--color-text-secondary);
-  }
-  
-  .transaction-amount {
+}
+
+.transaction-amount {
     text-align: right;
     font-weight: var(--font-weight-bold);
-  }
-  
-  .transaction-amount--positive {
+}
+
+.transaction-amount--positive {
     color: var(--color-green);
-  }
-  
-  .transaction-amount--negative {
+}
+
+.transaction-amount--negative {
     color: var(--color-text-primary);
+}
+
+/* Mobile responsive transformation */
+@media (max-width: 767px) {
+  .transaction-row {
+    display: block;
+    width: 100%;
+    border-bottom: 1px solid var(--color-border-default);
+    padding: var(--spacing-100);
+    position: relative;
+  }
+
+  .transaction-avatar {
+    position: absolute;
+    left: 15px; /* Center it in the 60px division */
+    top: 15px; /* Position from top of the row */
+    width: 40px;
+    height: 40px;
+    z-index: 1;
   }
   
-  /* Responsive adjustments */
-  @media (max-width: 767px) {
-    .transaction-avatar {
-        width: 40px; /* Adjust this if you have a different mobile size in Dashboard */
-        height: 40px;
-    }
-    
-    .transaction-name {
+  .transaction-name {
       gap: var(--spacing-150);
-    }
   }
+
+  .transaction-name .transaction-avatar {
+    position: absolute;
+    left: 15px;
+    top: 15px; /* Adjust vertical position as needed */
+  }
+
+  .transaction-name__text {
+    margin-left: 0; /* Remove any left margin since avatar is positioned absolutely */
+  }
+
+  /* Reset all cells */
+  .transactions__table-cell {
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* First row: Name and Amount side by side */
+  .transactions__table-cell--recipient {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-border-default);
+    width: 100%;
+  }
+
+  /* Second row: Category and Date side by side */
+  .transactions__table-cell--category {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: var(--font-size-12);
+      color: var(--color-text-secondary);
+      margin-top: 5px;
+  }
+
+  /* Hide the original date and amount cells */
+  .transactions__table-cell--date,
+  .transactions__table-cell--amount {
+      display: none;
+  }
+
+  /* Add amount to first cell using pseudo-element */
+  .transactions__table-cell--recipient::after {
+      content: attr(data-amount);
+      font-weight: var(--font-weight-bold);
+  }
+
+  .transactions__table-cell--recipient.transaction-amount--positive::after {
+      color: var(--color-green);
+  }
+
+  .transactions__table-cell--recipient.transaction-amount--negative::after {
+      color: var(--color-text-primary);
+  }
+
+  /* Add date to second cell using pseudo-element */
+  .transactions__table-cell--category::after {
+      content: attr(data-date);
+      color: var(--color-text-secondary);
+  }
+}

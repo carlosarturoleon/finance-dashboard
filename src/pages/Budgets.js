@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import './Budgets.css';
+import { formatDate, formatDateShort } from '../utils/dateUtils';
 
 const Budgets = () => {
   const { data, addBudget, updateBudget, deleteBudget, getMonthlySpentByCategory, getLatestTransactionsByCategory } = useData();
@@ -208,7 +209,7 @@ const Budgets = () => {
                             <div className="details">
                               <span className="name">{transaction.name}</span>
                               <span className="date">
-                                {new Date(transaction.date).toLocaleDateString()}
+                                {formatDate(transaction.date)}
                               </span>
                             </div>
                           </div>
