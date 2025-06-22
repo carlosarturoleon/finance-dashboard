@@ -286,6 +286,112 @@
   outline-offset: -2px;
 }
 
+/* Loading indicator for search */
+.transactions__search {
+  position: relative;
+}
+
+.transactions__search-loading {
+  position: absolute;
+  right: 40px; /* Space for search icon */
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-grey-500);
+  font-size: var(--font-size-16);
+  pointer-events: none;
+  animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+  0%, 20% { opacity: 0; }
+  50% { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+
+/* No results styling */
+.transactions__no-results {
+  text-align: center;
+  padding: var(--spacing-400);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* Improved filter option buttons */
+.transactions__filter-option {
+  width: 100%;
+  padding: var(--spacing-200);
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: var(--font-size-16);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+.transactions__filter-option:last-child {
+  border-bottom: none;
+}
+
+.transactions__filter-option:hover {
+  background-color: var(--color-grey-100);
+}
+
+.transactions__filter-option.selected {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+}
+
+.transactions__filter-option:focus {
+  outline: 2px solid var(--color-green);
+  outline-offset: -2px;
+}
+
+/* Modal specific styles */
+.transactions__filter-modal-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Improved search input focus state */
+.transactions__search-input:focus {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+  border-color: var(--color-green);
+}
+
+/* Better mobile filter button states */
+.transactions__mobile-filter-btn:focus {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+.transactions__mobile-filter-btn:active {
+  transform: scale(0.95);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .loading-dots,
+  .transactions__mobile-filter-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .transactions__filter-option.selected {
+    outline: 2px solid;
+  }
+  
+  .transactions__search-input:focus {
+    outline-width: 3px;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .transactions__filters {
