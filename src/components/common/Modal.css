@@ -1,0 +1,137 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-200);
+  animation: modal-backdrop-in 0.2s ease-out;
+}
+
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  overflow: hidden;
+  animation: modal-in 0.3s ease-out;
+  position: relative;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-300);
+  border-bottom: 1px solid var(--color-border-default);
+  background-color: var(--color-background-secondary);
+}
+
+.modal-title {
+  margin: 0;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: var(--spacing-100);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background-color: var(--color-grey-100);
+  color: var(--color-text-primary);
+}
+
+.modal-close:focus {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+.modal-content {
+  padding: var(--spacing-300);
+  overflow-y: auto;
+  max-height: calc(90vh - 80px); /* Account for header */
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 85vh;
+    animation: modal-mobile-in 0.3s ease-out;
+  }
+  
+  @keyframes modal-mobile-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-content {
+    max-height: calc(85vh - 80px);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal {
+    animation: none;
+  }
+  
+  .modal-close {
+    transition: none;
+  }
+}

@@ -4,6 +4,11 @@ import { Card } from '../components/common';
 import CustomDropdown from '../components/common/CustomDropdown';
 import Pagination from '../components/common/Pagination';
 import TransactionRow from '../components/transactions/TransactionRow';
+import Modal from '../components/common/Modal';
+import ErrorBoundary from '../components/common/ErrorBoundary';
+import { useMobileDetection, useDebounce } from '../hooks';
+import { sortTransactionsWithinSameDay, sanitizeSearchInput } from '../utils/transactionUtils';
+import { PAGINATION, DEBOUNCE_DELAYS, SORT_OPTIONS } from '../constants';
 import './Transactions.css';
 
 // Import SVG icons from assets
@@ -14,92 +19,40 @@ import { ReactComponent as CaretRightIcon } from '../assets/images/icon-caret-ri
 import { ReactComponent as SortIcon } from '../assets/images/icon-sort-mobile.svg';
 import { ReactComponent as FilterIcon } from '../assets/images/icon-filter-mobile.svg';
 
-// Constants
-const RESULTS_PER_PAGE = 10;
-const MAX_PAGINATION_BUTTONS = 5;
-
 const Transactions = () => {
   const { getFilteredTransactions, data } = useData();
-  const [search, setSearch] = useState('');
+  
+  // State management
+  const [rawSearch, setRawSearch] = useState('');
   const [sortBy, setSortBy] = useState('latest');
   const [category, setCategory] = useState('All Transactions');
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Mobile filter modal states
+  // Modal states
   const [showSortModal, setShowSortModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Check if mobile view
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 767);
-    };
-    
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    
-    return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
+  
+  // Custom hooks
+  const isMobile = useMobileDetection();
+  const debouncedSearch = useDebounce(sanitizeSearchInput(rawSearch), DEBOUNCE_DELAYS.SEARCH);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, sortBy, category]);
+  }, [debouncedSearch, sortBy, category]);
 
   // Get filtered and paginated transactions
   const { transactions, totalPages, totalCount } = getFilteredTransactions(
-    search, 
+    debouncedSearch, 
     sortBy, 
     category, 
     currentPage,
-    RESULTS_PER_PAGE
+    PAGINATION.RESULTS_PER_PAGE
   );
 
+  // Memoized sorted transactions with extracted function
   const sortedTransactions = useMemo(() => {
-    const sortTransactionsWithinSameDay = (transactionsToSort) => {
-      const transactionsByDate = {};
-      
-      transactionsToSort.forEach(transaction => {
-        const date = new Date(transaction.date);
-        const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-        
-        if (!transactionsByDate[dateKey]) {
-          transactionsByDate[dateKey] = [];
-        }
-        
-        transactionsByDate[dateKey].push(transaction);
-      });
-      
-      Object.keys(transactionsByDate).forEach(dateKey => {
-        transactionsByDate[dateKey].sort((a, b) => {
-          const timeA = new Date(a.date).getTime();
-          const timeB = new Date(b.date).getTime();
-          return timeA - timeB;
-        });
-      });
-      
-      const result = [];
-      const sortedDateKeys = Object.keys(transactionsByDate).sort((a, b) => {
-        if (sortBy === 'latest') {
-          return new Date(b.split('-').join('/')) - new Date(a.split('-').join('/'));
-        }
-        if (sortBy === 'oldest') {
-          return new Date(a.split('-').join('/')) - new Date(b.split('-').join('/'));
-        }
-        return new Date(b.split('-').join('/')) - new Date(a.split('-').join('/'));
-      });
-      
-      sortedDateKeys.forEach(dateKey => {
-        transactionsByDate[dateKey].forEach(transaction => {
-          result.push(transaction);
-        });
-      });
-      
-      return result;
-    };
-    
-    return sortTransactionsWithinSameDay(transactions);
+    return sortTransactionsWithinSameDay(transactions, sortBy);
   }, [transactions, sortBy]);
 
   // Categories array from data
@@ -114,242 +67,219 @@ const Transactions = () => {
     });
   }, [data.transactions]);
 
-  // Sort options
-  const sortOptions = [
-    { value: 'latest', label: 'Latest' },
-    { value: 'oldest', label: 'Oldest' },
-    { value: 'a-z', label: 'A to Z' },
-    { value: 'z-a', label: 'Z to A' },
-    { value: 'highest', label: 'Highest' },
-    { value: 'lowest', label: 'Lowest' }
-  ];
-
   const categoryOptions = categories.map(cat => ({ value: cat, label: cat }));
 
-  // Handle modal close
+  // Modal handlers
   const handleModalClose = () => {
     setShowSortModal(false);
     setShowFilterModal(false);
   };
 
-  // Handle sort selection in modal
   const handleSortSelect = (value) => {
     setSortBy(value);
     setShowSortModal(false);
   };
 
-  // Handle category selection in modal
   const handleCategorySelect = (value) => {
     setCategory(value);
     setShowFilterModal(false);
   };
 
   // Get current sort/filter labels for mobile buttons
-  const currentSortLabel = sortOptions.find(option => option.value === sortBy)?.label || 'Latest';
+  const currentSortLabel = SORT_OPTIONS.find(option => option.value === sortBy)?.label || 'Latest';
   const currentCategoryLabel = category.length > 12 ? `${category.substring(0, 12)}...` : category;
 
-  // Handle keyboard events for modals
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        handleModalClose();
-      }
-    };
-
-    if (showSortModal || showFilterModal) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [showSortModal, showFilterModal]);
+  // Loading state for better UX
+  const isLoading = debouncedSearch !== rawSearch;
 
   return (
-    <div className="transactions">
-      <h1 className="transactions__heading">Transactions</h1>
-      
-      <Card light className="transactions__card">
-        <div className="transactions__filters">
-          <div className="transactions__search">
-            <input
-              type="text"
-              placeholder="Search transaction"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="transactions__search-input form-control"
-              aria-label="Search transactions"
-            />
-            <SearchIcon className="transactions__search-icon" aria-hidden="true" />
-          </div>
-          
-          {/* Desktop Filter Controls */}
-          <div className="transactions__filter-controls">
-            <div className="transactions__filter">
-              <CustomDropdown
-                value={sortBy}
-                onChange={setSortBy}
-                options={sortOptions}
-                placeholder="Select sort"
-                label="Sort by"
-                CaretIcon={CaretDownIcon}
+    <ErrorBoundary>
+      <div className="transactions">
+        <h1 className="transactions__heading">Transactions</h1>
+        
+        <Card light className="transactions__card">
+          <div className="transactions__filters">
+            <div className="transactions__search">
+              <input
+                type="text"
+                placeholder="Search transaction"
+                value={rawSearch}
+                onChange={(e) => setRawSearch(e.target.value)}
+                className="transactions__search-input form-control"
+                aria-label="Search transactions"
+                maxLength={100}
               />
+              <SearchIcon className="transactions__search-icon" aria-hidden="true" />
+              {isLoading && (
+                <div className="transactions__search-loading" aria-label="Searching...">
+                  ⋯
+                </div>
+              )}
+            </div>
+            
+            {/* Desktop Filter Controls */}
+            <div className="transactions__filter-controls">
+              <div className="transactions__filter">
+                <CustomDropdown
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={SORT_OPTIONS}
+                  placeholder="Select sort"
+                  label="Sort by"
+                  CaretIcon={CaretDownIcon}
+                />
+              </div>
+
+              <div className="transactions__filter">
+                <CustomDropdown
+                  value={category}
+                  onChange={setCategory}
+                  options={categoryOptions}
+                  placeholder="Select category"
+                  label="Category"
+                  CaretIcon={CaretDownIcon}
+                />
+              </div>            
             </div>
 
-            <div className="transactions__filter">
-              <CustomDropdown
-                value={category}
-                onChange={setCategory}
-                options={categoryOptions}
-                placeholder="Select category"
-                label="Category"
-                CaretIcon={CaretDownIcon}
-              />
-            </div>            
-          </div>
-
-          {/* Mobile Filter Buttons */}
-          <div className="transactions__mobile-filters">
-            <button
-              className="transactions__mobile-filter-btn"
-              onClick={() => setShowSortModal(true)}
-              aria-label={`Sort by ${currentSortLabel}`}
-            >
-              <SortIcon aria-hidden="true" />
-            </button>
-            
-            <button
-              className="transactions__mobile-filter-btn"
-              onClick={() => setShowFilterModal(true)}
-              aria-label={`Filter by ${currentCategoryLabel}`}
-            >
-              <FilterIcon aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-        
-        <div className="transactions__table-container">
-          <table className="transactions__table">
-            <thead>
-              <tr>
-                <th className="transactions__table-header transactions__table-header--recipient">
-                  Recipient / Sender
-                </th>
-                <th className="transactions__table-header transactions__table-header--category">
-                  Category
-                </th>
-                <th className="transactions__table-header transactions__table-header--date">
-                  Transaction Date
-                </th>
-                <th className="transactions__table-header transactions__table-header--amount">
-                  Amount
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedTransactions.map((transaction, index) => (
-                <TransactionRow 
-                  key={`${transaction.name}-${transaction.date}-${index}`}
-                  transaction={transaction}
-                  index={index}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
-        
-        {totalPages > 0 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-            maxButtons={MAX_PAGINATION_BUTTONS}
-            PrevIcon={CaretLeftIcon}
-            NextIcon={CaretRightIcon}
-          />
-        )}
-      </Card>
-
-      {/* Sort Modal for Mobile */}
-      <div 
-        className={`transactions__filter-modal ${showSortModal ? 'transactions__filter-modal--active' : ''}`}
-        onClick={(e) => e.target === e.currentTarget && handleModalClose()}
-      >
-        <div className="transactions__filter-modal-content">
-          <div className="transactions__filter-modal-header">
-            <h3 className="transactions__filter-modal-title">Sort by</h3>
-            <button 
-              className="transactions__filter-modal-close"
-              onClick={handleModalClose}
-              aria-label="Close sort modal"
-            >
-              ×
-            </button>
+            {/* Mobile Filter Buttons */}
+            <div className="transactions__mobile-filters">
+              <button
+                className="transactions__mobile-filter-btn"
+                onClick={() => setShowSortModal(true)}
+                aria-label={`Sort by ${currentSortLabel}`}
+                type="button"
+              >
+                <SortIcon aria-hidden="true" />
+              </button>
+              
+              <button
+                className="transactions__mobile-filter-btn"
+                onClick={() => setShowFilterModal(true)}
+                aria-label={`Filter by ${currentCategoryLabel}`}
+                type="button"
+              >
+                <FilterIcon aria-hidden="true" />
+              </button>
+            </div>
           </div>
           
+          <div className="transactions__table-container">
+            <table 
+              className="transactions__table"
+              role="grid"
+              aria-label="Transactions table"
+              aria-rowcount={totalCount + 1}
+            >
+              <thead>
+                <tr role="row" aria-rowindex="1">
+                  <th 
+                    className="transactions__table-header transactions__table-header--recipient"
+                    scope="col"
+                    id="recipient-header"
+                  >
+                    Recipient / Sender
+                  </th>
+                  <th 
+                    className="transactions__table-header transactions__table-header--category"
+                    scope="col"
+                    id="category-header"
+                  >
+                    Category
+                  </th>
+                  <th 
+                    className="transactions__table-header transactions__table-header--date"
+                    scope="col"
+                    id="date-header"
+                  >
+                    Transaction Date
+                  </th>
+                  <th 
+                    className="transactions__table-header transactions__table-header--amount"
+                    scope="col"
+                    id="amount-header"
+                  >
+                    Amount
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedTransactions.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" className="transactions__no-results">
+                      {isLoading ? 'Searching...' : 'No transactions found'}
+                    </td>
+                  </tr>
+                ) : (
+                  sortedTransactions.map((transaction, index) => (
+                    <TransactionRow 
+                      key={`${transaction.name}-${transaction.date}-${index}`}
+                      transaction={transaction}
+                      index={index}
+                    />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          
+          {totalPages > 0 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              maxButtons={PAGINATION.MAX_BUTTONS}
+              PrevIcon={CaretLeftIcon}
+              NextIcon={CaretRightIcon}
+            />
+          )}
+        </Card>
+
+        {/* Sort Modal for Mobile */}
+        <Modal
+          isOpen={showSortModal}
+          onClose={handleModalClose}
+          title="Sort by"
+          className="transactions__sort-modal"
+        >
           <div className="transactions__filter-modal-group">
-            {sortOptions.map(option => (
-              <div 
+            {SORT_OPTIONS.map(option => (
+              <button
                 key={option.value}
                 className={`transactions__filter-option ${sortBy === option.value ? 'selected' : ''}`}
                 onClick={() => handleSortSelect(option.value)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleSortSelect(option.value);
-                  }
-                }}
+                type="button"
+                aria-pressed={sortBy === option.value}
               >
                 {option.label}
-              </div>
+              </button>
             ))}
           </div>
-        </div>
-      </div>
+        </Modal>
 
-      {/* Category Filter Modal for Mobile */}
-      <div 
-        className={`transactions__filter-modal ${showFilterModal ? 'transactions__filter-modal--active' : ''}`}
-        onClick={(e) => e.target === e.currentTarget && handleModalClose()}
-      >
-        <div className="transactions__filter-modal-content">
-          <div className="transactions__filter-modal-header">
-            <h3 className="transactions__filter-modal-title">Filter by Category</h3>
-            <button 
-              className="transactions__filter-modal-close"
-              onClick={handleModalClose}
-              aria-label="Close filter modal"
-            >
-              ×
-            </button>
-          </div>
-          
+        {/* Category Filter Modal for Mobile */}
+        <Modal
+          isOpen={showFilterModal}
+          onClose={handleModalClose}
+          title="Filter by Category"
+          className="transactions__filter-modal"
+        >
           <div className="transactions__filter-modal-group">
             {categoryOptions.map(option => (
-              <div 
+              <button
                 key={option.value}
                 className={`transactions__filter-option ${category === option.value ? 'selected' : ''}`}
                 onClick={() => handleCategorySelect(option.value)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleCategorySelect(option.value);
-                  }
-                }}
+                type="button"
+                aria-pressed={category === option.value}
               >
                 {option.label}
-              </div>
+              </button>
             ))}
           </div>
-        </div>
+        </Modal>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
