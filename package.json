@@ -20,6 +20,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:ci": "CI=true react-scripts test --coverage --watchAll=false",
+    "test:debug": "react-scripts test --runInBand --no-cache",
+    "test:watch": "react-scripts test --watch",
+    "test:components": "react-scripts test --testPathPattern=components",
+    "test:pages": "react-scripts test --testPathPattern=pages",
+    "test:utils": "react-scripts test --testPathPattern=utils",
+    "test:hooks": "react-scripts test --testPathPattern=hooks",
+    "test:context": "react-scripts test --testPathPattern=context",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -39,5 +48,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "identity-obj-proxy": "^3.0.0"
   }
 }
