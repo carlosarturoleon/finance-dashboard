@@ -57,92 +57,77 @@
     color: var(--color-text-primary);
 }
 
-/* Mobile responsive transformation */
+/* Mobile: each row becomes a two-line card
+   [avatar] name ........ amount
+   [avatar] category ...... date */
 @media (max-width: 767px) {
   .transaction-row {
-    display: block;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "avatar name     amount"
+      "avatar category date";
+    column-gap: var(--spacing-150);
+    row-gap: var(--spacing-50);
+    align-items: center;
+    padding: var(--spacing-200) 0;
     border-bottom: 1px solid var(--color-border-default);
-    padding: var(--spacing-100);
     position: relative;
   }
 
-  .transaction-avatar {
-    position: absolute;
-    left: 15px; /* Center it in the 60px division */
-    top: 15px; /* Position from top of the row */
-    width: 40px;
-    height: 40px;
-    z-index: 1;
-  }
-  
-  .transaction-name {
-      gap: var(--spacing-150);
+  .transaction-row:first-child {
+    padding-top: 0;
   }
 
-  .transaction-name .transaction-avatar {
-    position: absolute;
-    left: 15px;
-    top: 15px; /* Adjust vertical position as needed */
+  .transaction-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .transaction-row:hover {
+    background-color: transparent;
+  }
+
+  /* Flatten the recipient cell so avatar and name sit in the grid directly */
+  .transactions__table-cell--recipient,
+  .transaction-name {
+    display: contents;
+  }
+
+  .transaction-avatar {
+    grid-area: avatar;
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-14);
   }
 
   .transaction-name__text {
-    margin-left: 0; /* Remove any left margin since avatar is positioned absolutely */
+    grid-area: name;
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-150);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Reset all cells */
-  .transactions__table-cell {
-    display: block;
-    width: 100%;
-    border: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  /* First row: Name and Amount side by side */
-  .transactions__table-cell--recipient {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-border-default);
-    width: 100%;
-  }
-
-  /* Second row: Category and Date side by side */
   .transactions__table-cell--category {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: var(--font-size-12);
-      color: var(--color-text-secondary);
-      margin-top: 5px;
+    grid-area: category;
+    line-height: var(--line-height-150);
   }
 
-  /* Hide the original date and amount cells */
-  .transactions__table-cell--date,
+  .transactions__table-cell--date {
+    grid-area: date;
+    margin: 0; /* .transaction-date margin from Dashboard.css leaks in */
+    text-align: right;
+    white-space: nowrap;
+    line-height: var(--line-height-150);
+  }
+
   .transactions__table-cell--amount {
-      display: none;
-  }
-
-  /* Add amount to first cell using pseudo-element */
-  .transactions__table-cell--recipient::after {
-      content: attr(data-amount);
-      font-weight: var(--font-weight-bold);
-  }
-
-  .transactions__table-cell--recipient.transaction-amount--positive::after {
-      color: var(--color-green);
-  }
-
-  .transactions__table-cell--recipient.transaction-amount--negative::after {
-      color: var(--color-text-primary);
-  }
-
-  /* Add date to second cell using pseudo-element */
-  .transactions__table-cell--category::after {
-      content: attr(data-date);
-      color: var(--color-text-secondary);
+    grid-area: amount;
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-150);
+    white-space: nowrap;
   }
 }

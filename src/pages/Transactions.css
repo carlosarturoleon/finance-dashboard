@@ -415,47 +415,69 @@
 }
 
 @media (max-width: 767px) {
-  .transactions__filters {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
+  .transactions__heading {
+    display: flex;
     align-items: center;
-    gap: var(--spacing-200);
+    min-height: 56px;
+  }
+
+  .transactions__filters {
+    display: flex;
+    align-items: center;
+    /* 24px between search and icons, minus the 10px icon-button padding */
+    gap: calc(var(--spacing-300) - 10px);
   }
 
   .transactions__search {
     flex: 1;
-    margin-bottom: 0;
-    margin-right: var(--spacing-50);
+    max-width: none;
     min-width: 0;
   }
-  
+
+  .transactions__search-input {
+    height: 45px;
+    padding: 0 52px 0 var(--spacing-250);
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-150);
+    border-color: var(--color-beige-500);
+  }
+
+  .transactions__search-input::placeholder {
+    color: var(--color-beige-500);
+  }
+
+  .transactions__search-icon {
+    right: var(--spacing-250);
+  }
+
   .transactions__filter-controls {
     display: none;
   }
-  
+
+  /* Icon buttons keep a 40px tap target around the 20px icon;
+     the negative margin keeps the last icon flush with the card edge */
   .transactions__mobile-filters {
     display: flex;
     gap: var(--spacing-50);
-    justify-content: flex-end;
+    margin-right: -10px;
     flex-shrink: 0;
   }
 
   .transactions__mobile-filter-btn {
     min-width: 40px;
     min-height: 40px;
-    padding: var(--spacing-50);
+    padding: 10px;
+    background-color: transparent;
   }
 
   .transactions__card {
-    padding: var(--spacing-300) var(--spacing-200);
+    padding: var(--spacing-300) var(--spacing-250);
   }
-  
-  /* Hide table headers on mobile */
+
   .transactions__table-header {
     display: none;
   }
 
-  /* Remove horizontal scroll and let TransactionRow.css handle the mobile layout */
   .transactions__table-container {
     overflow-x: visible;
   }
@@ -464,29 +486,17 @@
     min-width: auto;
   }
 
-  /* Transform table structure for mobile */
   .transactions__table,
-  .transactions__table tbody,
-  .transactions__table-row {
+  .transactions__table tbody {
     display: block;
     width: 100%;
-  } 
+  }
 
   .transactions__table-cell {
-    border-bottom: none;
-    padding: 0;
-  }
-    
-  /* Remove any column width constraints on mobile */
-  .transactions__table-cell--recipient,
-  .transactions__table-cell--category,
-  .transactions__table-cell--date,
-  .transactions__table-cell--amount {
     width: auto;
-    min-width: auto;
-    padding-left: 60px;
+    padding: 0;
+    border-bottom: none;
   }
-
 }
 
 /* Accessibility improvements */
