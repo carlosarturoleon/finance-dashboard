@@ -44,19 +44,11 @@ export const useFocusTrap = (isActive) => {
       }
     };
 
-    const handleEscapeKey = (e) => {
-      if (e.key === 'Escape') {
-        // This will be handled by the parent component
-        e.stopPropagation();
-      }
-    };
-
+    // Escape is left to bubble up so the parent (e.g. Modal's document listener) can close
     container.addEventListener('keydown', handleTabKey);
-    container.addEventListener('keydown', handleEscapeKey);
 
     return () => {
       container.removeEventListener('keydown', handleTabKey);
-      container.removeEventListener('keydown', handleEscapeKey);
       
       // Restore focus to the previously focused element
       if (previousActiveElement.current) {
