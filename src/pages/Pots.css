@@ -1,0 +1,72 @@
+/* Pots Page - BEM approach */
+.pots {
+  width: 100%;
+}
+
+.pots__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-200);
+  min-height: 3.5rem; /* 56px title row in the design */
+  margin-bottom: var(--spacing-400);
+}
+
+.pots__heading {
+  margin: 0;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+}
+
+.pots__add-button {
+  padding: var(--spacing-200);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-background-dark);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.pots__add-button:hover {
+  background-color: var(--color-grey-500);
+}
+
+.pots__add-button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.pots__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-300);
+  align-items: start;
+}
+
+/* Tablet: 40px sides and 32px top/bottom spacing in the design, one pot per row */
+@media (max-width: 1024px) {
+  .pots {
+    padding-block: var(--spacing-100) var(--spacing-200);
+    padding-inline: var(--spacing-200);
+  }
+
+  .pots__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Mobile: 16px sides and 24px top/bottom spacing in the design */
+@media (max-width: 767px) {
+  .pots {
+    padding-block: var(--spacing-100) var(--spacing-200);
+    padding-inline: var(--spacing-50);
+  }
+}
