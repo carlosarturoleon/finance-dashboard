@@ -50,3 +50,15 @@
   gap: var(--spacing-300);
   align-items: start;
 }
+
+/* Tablet: 40px sides and 32px top/bottom spacing in the design, one pot per row */
+@media (max-width: 1024px) {
+  .pots {
+    padding-block: var(--spacing-100) var(--spacing-200);
+    padding-inline: var(--spacing-200);
+  }
+
+  .pots__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
