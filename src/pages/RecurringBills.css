@@ -1,0 +1,230 @@
+/* Recurring Bills Page - BEM approach */
+.recurring-bills {
+  width: 100%;
+}
+
+.recurring-bills__heading {
+  display: flex;
+  align-items: center;
+  min-height: 3.5rem; /* 56px title row in the design */
+  margin: 0 0 var(--spacing-400);
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+}
+
+.recurring-bills__layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-300);
+}
+
+/* Cards in this design are flat and spaced by the layout gap */
+.recurring-bills__card.card {
+  margin-bottom: 0;
+  box-shadow: none;
+}
+
+/* Left column: total + summary */
+.recurring-bills__overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-300);
+  flex: 1 1 0;
+  max-width: 337px;
+  min-width: 0;
+}
+
+.recurring-bills__total {
+  gap: var(--spacing-400);
+  padding: var(--spacing-300);
+}
+
+.recurring-bills__total-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.recurring-bills__total-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 11px; /* Figma value, no spacing token */
+}
+
+.recurring-bills__total-label {
+  margin: 0;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-150);
+  color: var(--color-text-inverse);
+}
+
+.recurring-bills__total-value {
+  margin: 0;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-inverse);
+}
+
+.recurring-bills__summary {
+  gap: var(--spacing-250);
+  padding: var(--spacing-250);
+}
+
+.recurring-bills__summary-heading {
+  margin: 0;
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+}
+
+.recurring-bills__summary-item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-200);
+  padding-block: var(--spacing-200);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-grey-500) 15%, transparent);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+}
+
+.recurring-bills__summary-item:first-child {
+  padding-top: 0;
+}
+
+.recurring-bills__summary-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.recurring-bills__summary-item dt {
+  color: var(--color-text-secondary);
+}
+
+.recurring-bills__summary-item dd {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.recurring-bills__summary-item--due-soon dt,
+.recurring-bills__summary-item--due-soon dd {
+  color: var(--color-red);
+}
+
+/* Right column: bills table */
+.recurring-bills__list {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: var(--spacing-400);
+  gap: var(--spacing-300);
+  /* Let the sort menu show past the card edge */
+  overflow: visible;
+}
+
+.recurring-bills__filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-300);
+}
+
+.recurring-bills__search {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+
+.recurring-bills__search-input {
+  width: 100%;
+  height: 45px;
+  padding: 0 52px 0 var(--spacing-250);
+  border: 1px solid var(--color-beige-500);
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+}
+
+.recurring-bills__search-input::placeholder {
+  color: var(--color-beige-500);
+}
+
+.recurring-bills__search-input:focus {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+  border-color: var(--color-green);
+}
+
+.recurring-bills__search-icon {
+  position: absolute;
+  right: var(--spacing-250);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+/* Sort dropdown sized to the design's input field */
+.recurring-bills__sort .dropdown {
+  min-width: 0;
+}
+
+.recurring-bills__sort .dropdown__label {
+  color: var(--color-text-secondary);
+}
+
+.recurring-bills__sort .dropdown__selected {
+  height: 45px;
+  padding: 0 var(--spacing-250);
+  border-color: var(--color-beige-500);
+  line-height: var(--line-height-150);
+}
+
+.recurring-bills__sort .dropdown__selected:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+.recurring-bills__sort .dropdown__menu {
+  left: auto;
+  right: 0;
+}
+
+.recurring-bills__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recurring-bills__table-header {
+  padding: var(--spacing-150) var(--spacing-200);
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+/* Column widths from the design: 120px + 100px, plus 16px cell padding each side */
+.recurring-bills__table-header--due {
+  width: 152px;
+}
+
+.recurring-bills__table-header--amount {
+  width: 132px;
+  text-align: right;
+}
+
+.recurring-bills__no-results {
+  padding: var(--spacing-400);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
