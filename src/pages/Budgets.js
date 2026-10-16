@@ -264,7 +264,7 @@ const Budgets = () => {
             <div className="budgets__summary-details">
               <h2 className="budgets__summary-title">Spending Summary</h2>
               <ul className="budgets__summary-list">
-                {budgetsWithSpending.map(budget => (
+                {[...budgetsWithSpending].sort((a, b) => b.spent - a.spent).map(budget => (
                   <li className="budgets__summary-item" key={budget.category}>
                     <span
                       className="budgets__color-bar"
