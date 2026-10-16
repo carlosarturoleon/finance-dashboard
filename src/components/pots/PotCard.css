@@ -208,6 +208,13 @@
   cursor: not-allowed;
 }
 
+/* Tablet and mobile cards are 317px tall in the design (desktop: 303px) */
+@media (max-width: 1024px) {
+  .card.pot-card {
+    min-height: 19.8125rem;
+  }
+}
+
 @media (max-width: 767px) {
   .card.pot-card {
     padding: var(--spacing-300) var(--spacing-250);

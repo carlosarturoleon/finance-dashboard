@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-200);
-  padding-block: var(--spacing-100);
+  min-height: 3.5rem; /* 56px title row in the design */
   margin-bottom: var(--spacing-400);
 }
 
@@ -63,10 +63,10 @@
   }
 }
 
-/* Mobile: 16px sides and 24px top spacing in the design */
+/* Mobile: 16px sides and 24px top/bottom spacing in the design */
 @media (max-width: 767px) {
   .pots {
-    padding-block: var(--spacing-100) 0;
+    padding-block: var(--spacing-100) var(--spacing-200);
     padding-inline: var(--spacing-50);
   }
 }
