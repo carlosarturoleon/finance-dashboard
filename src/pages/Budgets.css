@@ -685,6 +685,21 @@
     align-items: stretch;
   }
 
+  /* Undo the tablet flex: 1, which would collapse the 280px chart height in a column */
+  .budgets__chart-wrapper,
+  .budgets__summary-details {
+    flex: none;
+  }
+
+  .budget-card__latest {
+    padding: var(--spacing-200);
+  }
+
+  /* Mobile design lists latest spending without avatars */
+  .budget-card__avatar {
+    display: none;
+  }
+
   .budgets__summary-item,
   .budget-card__transaction {
     gap: var(--spacing-150);
