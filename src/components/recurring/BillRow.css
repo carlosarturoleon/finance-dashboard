@@ -81,3 +81,14 @@
 .bill-row--due-soon .bill-row__cell--amount {
   color: var(--color-red);
 }
+
+/* Tablet: rows line up with the card padding */
+@media (max-width: 1024px) {
+  .bill-row__cell--title {
+    padding-left: 0;
+  }
+
+  .bill-row__cell--amount {
+    padding-right: 0;
+  }
+}
