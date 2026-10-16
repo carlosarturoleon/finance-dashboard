@@ -3,8 +3,9 @@ import { useData } from '../context/DataContext';
 import { Card } from '../components/common';
 import CustomDropdown from '../components/common/CustomDropdown';
 import ErrorBoundary from '../components/common/ErrorBoundary';
+import Modal from '../components/common/Modal';
 import BillRow from '../components/recurring/BillRow';
-import { useDebounce } from '../hooks';
+import { useDebounce, useMobileDetection } from '../hooks';
 import { sanitizeSearchInput } from '../utils/transactionUtils';
 import { formatCurrency, getBillStatus, getBillSummary, sortBills } from '../utils/billUtils';
 import { DEBOUNCE_DELAYS, SORT_OPTIONS } from '../constants';
@@ -13,6 +14,7 @@ import './RecurringBills.css';
 import { ReactComponent as BillsIcon } from '../assets/images/icon-recurring-bills.svg';
 import { ReactComponent as SearchIcon } from '../assets/images/icon-search.svg';
 import { ReactComponent as CaretDownIcon } from '../assets/images/icon-caret-down.svg';
+import { ReactComponent as SortIcon } from '../assets/images/icon-sort-mobile.svg';
 
 const formatGroup = ({ count, amount }) => `${count} (${formatCurrency(amount)})`;
 
@@ -20,6 +22,8 @@ const RecurringBills = () => {
   const { getRecurringBills, data } = useData();
   const [rawSearch, setRawSearch] = useState('');
   const [sortBy, setSortBy] = useState('latest');
+  const [showSortModal, setShowSortModal] = useState(false);
+  const isMobile = useMobileDetection();
   const search = useDebounce(sanitizeSearchInput(rawSearch), DEBOUNCE_DELAYS.SEARCH);
 
   const recurringBills = getRecurringBills();
@@ -40,6 +44,13 @@ const RecurringBills = () => {
     return sortBills(filtered, sortBy);
   }, [recurringBills, search, sortBy]);
 
+  const handleSortSelect = (value) => {
+    setSortBy(value);
+    setShowSortModal(false);
+  };
+
+  const currentSortLabel = SORT_OPTIONS.find((option) => option.value === sortBy)?.label;
+
   return (
     <ErrorBoundary>
       <div className="recurring-bills">
@@ -52,7 +63,9 @@ const RecurringBills = () => {
                 <BillsIcon />
               </div>
               <div className="recurring-bills__total-texts">
-                <h2 className="recurring-bills__total-label">Total Bills</h2>
+                <h2 className="recurring-bills__total-label">
+                  {isMobile ? 'Total bills' : 'Total Bills'}
+                </h2>
                 <p className="recurring-bills__total-value">{formatCurrency(summary.total)}</p>
               </div>
             </Card>
@@ -101,6 +114,15 @@ const RecurringBills = () => {
                   CaretIcon={CaretDownIcon}
                 />
               </div>
+
+              <button
+                className="recurring-bills__mobile-sort"
+                onClick={() => setShowSortModal(true)}
+                aria-label={`Sort by ${currentSortLabel}`}
+                type="button"
+              >
+                <SortIcon aria-hidden="true" />
+              </button>
             </div>
 
             <table className="recurring-bills__table" aria-label="Recurring bills">
@@ -135,6 +157,27 @@ const RecurringBills = () => {
             </table>
           </Card>
         </div>
+
+        <Modal
+          isOpen={showSortModal}
+          onClose={() => setShowSortModal(false)}
+          title="Sort by"
+          className="recurring-bills__sort-modal"
+        >
+          <div className="recurring-bills__sort-options">
+            {SORT_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                className={`recurring-bills__sort-option ${sortBy === option.value ? 'selected' : ''}`}
+                onClick={() => handleSortSelect(option.value)}
+                type="button"
+                aria-pressed={sortBy === option.value}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </Modal>
       </div>
     </ErrorBoundary>
   );

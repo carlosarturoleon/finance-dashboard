@@ -198,6 +198,11 @@
   right: 0;
 }
 
+/* Icon button that replaces the sort dropdown on mobile */
+.recurring-bills__mobile-sort {
+  display: none;
+}
+
 .recurring-bills__table {
   width: 100%;
   border-collapse: collapse;
@@ -266,4 +271,124 @@
     width: 116px;
     padding-right: 0;
   }
+}
+
+/* Mobile: totals stack, sort becomes an icon button, each bill is a two-line row */
+@media (max-width: 767px) {
+  .recurring-bills {
+    padding: 0;
+  }
+
+  .recurring-bills__heading {
+    min-height: 3.375rem; /* 54px title row in the design */
+  }
+
+  .recurring-bills__overview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+  }
+
+  .recurring-bills__total {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--spacing-250);
+    padding: var(--spacing-300) var(--spacing-250);
+  }
+
+  .recurring-bills__list {
+    padding: var(--spacing-300) var(--spacing-250);
+  }
+
+  /* 24px between search and icon, minus the 10px icon-button padding */
+  .recurring-bills__filters {
+    gap: calc(var(--spacing-300) - 10px);
+  }
+
+  .recurring-bills__search {
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .recurring-bills__sort {
+    display: none;
+  }
+
+  /* 40px tap target around the 20px icon; negative margin keeps it flush with the card edge */
+  .recurring-bills__mobile-sort {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    margin-right: -10px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .recurring-bills__mobile-sort svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .recurring-bills__mobile-sort:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+  }
+
+  .recurring-bills__table thead {
+    display: none;
+  }
+
+  .recurring-bills__table,
+  .recurring-bills__table tbody {
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Sort options in the mobile modal */
+.recurring-bills__sort-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.recurring-bills__sort-option {
+  width: 100%;
+  padding: var(--spacing-200);
+  border: none;
+  border-bottom: 1px solid var(--color-border-default);
+  background: none;
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  text-align: left;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.recurring-bills__sort-option:last-child {
+  border-bottom: none;
+}
+
+.recurring-bills__sort-option:hover {
+  background-color: var(--color-grey-100);
+}
+
+.recurring-bills__sort-option.selected {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+}
+
+.recurring-bills__sort-option:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: -2px;
 }

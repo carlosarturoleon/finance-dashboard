@@ -58,10 +58,39 @@ describe('RecurringBills Page', () => {
     expect(await screen.findByText('No recurring bills found')).toBeInTheDocument();
   });
 
+  describe('on mobile', () => {
+    const originalWidth = window.innerWidth;
+
+    beforeEach(() => {
+      window.innerWidth = 375;
+    });
+
+    afterEach(() => {
+      window.innerWidth = originalWidth;
+    });
+
+    test('uses the mobile label for the total', async () => {
+      renderPage();
+      expect(await screen.findByRole('heading', { name: 'Total bills' })).toBeInTheDocument();
+    });
+
+    test('sorts bills from the sort modal', () => {
+      renderPage();
+
+      fireEvent.click(screen.getByRole('button', { name: 'Sort by Latest' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Z to A' }));
+
+      expect(billNames()[0]).toBe('Spark Electric Solutions');
+      expect(billNames()[7]).toBe('Aqua Flow Utilities');
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Sort by Z to A' })).toBeInTheDocument();
+    });
+  });
+
   test('sorts bills with the dropdown', () => {
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: /Latest/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Latest' }));
     fireEvent.click(screen.getByRole('option', { name: 'Highest' }));
 
     expect(billNames()[0]).toBe('Spark Electric Solutions');
