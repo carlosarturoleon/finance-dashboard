@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
+import PotCard from '../components/pots/PotCard';
 import './Pots.css';
 
 const Pots = () => {
@@ -157,85 +158,30 @@ const Pots = () => {
   };
   
   return (
-    <div className="pots-page">
-      <div className="pots-header">
-        <h1>Pots</h1>
-        <button onClick={handleAddPot} className="add-pot-btn">
-          Add New Pot
+    <div className="pots">
+      <div className="pots__header">
+        <h1 className="pots__heading">Pots</h1>
+        <button onClick={handleAddPot} className="pots__add-button">
+          + Add New Pot
         </button>
       </div>
-      
+
       {pots.length === 0 ? (
         <div className="no-pots">
           <p>You haven't created any pots yet. Add a pot to start saving toward your goals.</p>
         </div>
       ) : (
-        <div className="pots-grid">
-          {pots.map(pot => {
-            const progress = (pot.total / pot.target) * 100;
-            const formattedProgress = Math.min(100, progress).toFixed(0);
-            
-            return (
-              <div className="pot-card" key={pot.name}>
-                <div className="pot-header">
-                  <h2>{pot.name}</h2>
-                  <div className="pot-actions">
-                    <button 
-                      onClick={() => handleEditPot(pot)}
-                      className="icon-button edit-button"
-                      aria-label={`Edit ${pot.name} pot`}
-                    >
-                      <span>✏️</span>
-                    </button>
-                    <button 
-                      onClick={() => handleDeletePot(pot)}
-                      className="icon-button delete-button"
-                      aria-label={`Delete ${pot.name} pot`}
-                    >
-                      <span>🗑️</span>
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="pot-details">
-                  <div className="progress-container">
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ 
-                          width: `${formattedProgress}%`,
-                          backgroundColor: pot.theme
-                        }}
-                      ></div>
-                    </div>
-                    <div className="progress-text">
-                      <span>${pot.total.toFixed(2)}</span>
-                      <span>${pot.target.toFixed(2)}</span>
-                    </div>
-                    <div className="progress-percentage">
-                      {formattedProgress}% toward target
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pot-actions-buttons">
-                  <button 
-                    onClick={() => handleAddMoney(pot)} 
-                    className="action-btn add-money-btn"
-                  >
-                    Add Money
-                  </button>
-                  <button 
-                    onClick={() => handleWithdrawMoney(pot)} 
-                    className="action-btn withdraw-money-btn"
-                    disabled={pot.total <= 0}
-                  >
-                    Withdraw
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+        <div className="pots__grid">
+          {pots.map(pot => (
+            <PotCard
+              key={pot.name}
+              pot={pot}
+              onAddMoney={handleAddMoney}
+              onWithdraw={handleWithdrawMoney}
+              onEdit={handleEditPot}
+              onDelete={handleDeletePot}
+            />
+          ))}
         </div>
       )}
       

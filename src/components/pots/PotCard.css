@@ -1,0 +1,209 @@
+/* Pot Card - BEM approach */
+.card.pot-card {
+  gap: var(--spacing-400);
+  padding: var(--spacing-300);
+  margin-bottom: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* Header */
+.pot-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-200);
+}
+
+.pot-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+  min-width: 0;
+}
+
+.pot-card__dot {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+}
+
+.pot-card__name {
+  margin: 0;
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+}
+
+/* Options menu */
+.pot-card__menu {
+  position: relative;
+}
+
+.pot-card__menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.pot-card__menu-button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.pot-card__menu-list {
+  position: absolute;
+  top: calc(100% + var(--spacing-150));
+  right: 0;
+  z-index: 10;
+  min-width: 114px;
+  margin: 0;
+  padding: var(--spacing-150) var(--spacing-250);
+  list-style: none;
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.pot-card__menu-list li + li {
+  margin-top: var(--spacing-150);
+  padding-top: var(--spacing-150);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.pot-card__menu-item {
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.pot-card__menu-item--danger {
+  color: var(--color-red);
+}
+
+.pot-card__menu-item:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+/* Progress */
+.pot-card__progress {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-200);
+  min-height: 114px;
+}
+
+.pot-card__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-200);
+}
+
+.pot-card__total-label {
+  margin: 0;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+.pot-card__total-amount {
+  margin: 0;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.pot-card__bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-150);
+}
+
+.pot-card__bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-default);
+  background-color: var(--color-beige-100);
+}
+
+.pot-card__bar-fill {
+  height: 100%;
+  border-radius: var(--radius-default);
+}
+
+.pot-card__bar-texts {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-100);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+.pot-card__percentage,
+.pot-card__target {
+  margin: 0;
+}
+
+.pot-card__percentage {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Actions */
+.pot-card__actions {
+  display: flex;
+  gap: var(--spacing-200);
+}
+
+.pot-card__action-button {
+  flex: 1;
+  padding: var(--spacing-200);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-beige-100);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.pot-card__action-button:hover:not(:disabled) {
+  background-color: var(--color-white);
+  box-shadow: inset 0 0 0 1px var(--color-beige-500);
+}
+
+.pot-card__action-button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.pot-card__action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
