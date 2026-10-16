@@ -62,3 +62,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Mobile: 16px sides and 24px top spacing in the design */
+@media (max-width: 767px) {
+  .pots {
+    padding-block: var(--spacing-100) 0;
+    padding-inline: var(--spacing-50);
+  }
+}

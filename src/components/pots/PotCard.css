@@ -207,3 +207,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 767px) {
+  .card.pot-card {
+    padding: var(--spacing-300) var(--spacing-250);
+  }
+}
