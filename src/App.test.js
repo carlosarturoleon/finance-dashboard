@@ -8,6 +8,8 @@ jest.mock('react-router-dom', () => ({
   Route: ({ element }) => <div data-testid="mock-route">{element}</div>,
   NavLink: ({ children, to, className, ...props }) => 
     <a href={to} className={className} {...props}>{children}</a>,
+  Link: ({ children, to, ...props }) => <a href={to} {...props}>{children}</a>,
+  useNavigate: () => jest.fn(),
 }));
 
 // Mock the data.json import from the correct relative path

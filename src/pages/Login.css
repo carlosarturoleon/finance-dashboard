@@ -1,0 +1,192 @@
+/* Login page: full-screen layout without the app navigation */
+.login {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-beige-100);
+}
+
+/* Illustration column */
+.login__aside {
+  flex: 1 1 0;
+  max-width: 600px;
+  padding: var(--spacing-250);
+  display: flex;
+}
+
+.login__panel {
+  position: sticky;
+  top: var(--spacing-250);
+  flex: 1;
+  min-height: calc(100vh - 2 * var(--spacing-250));
+  max-height: calc(100vh - 2 * var(--spacing-250));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--spacing-500);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--color-grey-900);
+  background-image: url('../assets/images/illustration-authentication.svg');
+  background-size: cover;
+  background-position: center;
+  color: var(--color-white);
+}
+
+.login__logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.login__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-300);
+}
+
+.login__tagline {
+  margin: 0;
+  font: var(--text-preset-1);
+  font-weight: var(--font-weight-bold);
+}
+
+.login__description {
+  margin: 0;
+  font: var(--text-preset-4);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Form column */
+.login__main {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-400) var(--spacing-500);
+}
+
+.login__card {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-400);
+  padding: var(--spacing-400);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+}
+
+.login__title {
+  margin: 0;
+  font: var(--text-preset-1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-grey-900);
+}
+
+.login__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-200);
+}
+
+.login__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-50);
+}
+
+.login__label {
+  margin: 0;
+  font: var(--text-preset-5-bold);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-grey-500);
+}
+
+.login__input {
+  /* Figma strokes sit inside the 45px field, so take the border out of the padding */
+  padding: calc(var(--spacing-150) - 1px) calc(var(--spacing-250) - 1px);
+  border: 1px solid var(--color-beige-500);
+  border-radius: var(--radius-md);
+  font: var(--text-preset-4);
+  color: var(--color-grey-900);
+}
+
+.login__input:focus {
+  border-color: var(--color-grey-900);
+}
+
+.login__input:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
+
+.login__password {
+  position: relative;
+}
+
+.login__input--password {
+  padding-right: calc(var(--spacing-250) + var(--spacing-200) + var(--spacing-200));
+}
+
+.login__toggle-password {
+  position: absolute;
+  top: 50%;
+  right: var(--spacing-250);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-200);
+  height: var(--spacing-200);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.login__toggle-password:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+  border-radius: var(--radius-default);
+}
+
+.login__submit {
+  width: 100%;
+  padding: var(--spacing-200);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+  font: var(--text-preset-4-bold);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.login__submit:hover {
+  background-color: var(--color-grey-500);
+}
+
+.login__submit:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
+
+.login__signup {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-100);
+  font: var(--text-preset-4);
+  color: var(--color-grey-500);
+}
+
+.login__signup-link {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-grey-900);
+  text-decoration: underline;
+}
+
+.login__signup-link:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
