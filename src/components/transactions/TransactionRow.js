@@ -43,8 +43,7 @@ const TransactionRow = ({ transaction, index }) => {
       aria-rowindex={index + 2} // +2 because header row is index 1
     >
       <td 
-        className={`transactions__table-cell transactions__table-cell--recipient ${amountClass}`}
-        data-amount={formattedAmount}
+        className="transactions__table-cell transactions__table-cell--recipient"
         role="gridcell"
         aria-describedby={`transaction-${index}-details`}
       >
@@ -65,7 +64,6 @@ const TransactionRow = ({ transaction, index }) => {
       </td>
       <td 
         className="transactions__table-cell transactions__table-cell--category transaction-category"
-        data-date={formatDate(transaction.date)}
         role="gridcell"
       >
         <span id={`transaction-${index}-category`}>

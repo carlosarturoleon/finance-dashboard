@@ -167,6 +167,15 @@
 
 /* Mobile styles */
 @media (max-width: 767px) {
+  .navigation {
+    height: 52px;
+  }
+
+  .nav-links li a {
+    height: 44px;
+    padding: var(--spacing-100) 0; /* 8 + 24px icon + 4px border + 8 = 44px */
+  }
+
   .nav-links {
     margin: var(--spacing-100) var(--spacing-200) 0 var(--spacing-200)
   }

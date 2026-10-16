@@ -41,7 +41,7 @@
 /* Media query for mobile */
 @media (max-width: 767px) {
   .main-content {
-    padding: var(--spacing-200) var(--spacing-150);
-    padding-bottom: 80px; /* Space for the mobile navigation */
+    padding: var(--spacing-300) var(--spacing-200);
+    padding-bottom: 76px; /* 52px mobile navigation + 24px */
   }
 }
