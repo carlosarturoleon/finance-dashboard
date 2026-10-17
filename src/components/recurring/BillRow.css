@@ -1,0 +1,83 @@
+/* BillRow Component Styles */
+.bill-row__cell {
+  padding: var(--spacing-250) var(--spacing-200);
+  border-bottom: 1px solid var(--color-border-default);
+  vertical-align: middle;
+}
+
+/* 24px between the table header and the first bill */
+.bill-row:first-child .bill-row__cell {
+  padding-top: var(--spacing-300);
+}
+
+.bill-row:last-child .bill-row__cell {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.bill-row__title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-200);
+}
+
+.bill-row__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-beige-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bill-row__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bill-row__name {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+}
+
+.bill-row__due {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-100);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.bill-row--paid .bill-row__due {
+  color: var(--color-green);
+}
+
+/* 14px glyph in the design's 16px icon box */
+.bill-row__status-icon {
+  flex-shrink: 0;
+  margin: 1px;
+}
+
+.bill-row__cell--amount {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bill-row--due-soon .bill-row__cell--amount {
+  color: var(--color-red);
+}

@@ -1,220 +1,142 @@
 import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
+import { Card } from '../components/common';
+import CustomDropdown from '../components/common/CustomDropdown';
+import ErrorBoundary from '../components/common/ErrorBoundary';
+import BillRow from '../components/recurring/BillRow';
+import { useDebounce } from '../hooks';
+import { sanitizeSearchInput } from '../utils/transactionUtils';
+import { formatCurrency, getBillStatus, getBillSummary, sortBills } from '../utils/billUtils';
+import { DEBOUNCE_DELAYS, SORT_OPTIONS } from '../constants';
 import './RecurringBills.css';
-import { formatDateShort } from '../utils/dateUtils';
+
+import { ReactComponent as BillsIcon } from '../assets/images/icon-recurring-bills.svg';
+import { ReactComponent as SearchIcon } from '../assets/images/icon-search.svg';
+import { ReactComponent as CaretDownIcon } from '../assets/images/icon-caret-down.svg';
+
+const formatGroup = ({ count, amount }) => `${count} (${formatCurrency(amount)})`;
 
 const RecurringBills = () => {
   const { getRecurringBills, data } = useData();
-  const [search, setSearch] = useState('');
+  const [rawSearch, setRawSearch] = useState('');
   const [sortBy, setSortBy] = useState('latest');
+  const search = useDebounce(sanitizeSearchInput(rawSearch), DEBOUNCE_DELAYS.SEARCH);
 
-  // Get all recurring bills
   const recurringBills = getRecurringBills();
-  
-  // Get the latest transaction date (used to determine which bills are due soon)
-  const latestTransactionDate = useMemo(() => {
-    const dates = data.transactions.map(t => new Date(t.date));
+
+  // The latest transaction stands in for "today" in the sample data
+  const referenceDate = useMemo(() => {
+    const dates = data.transactions.map((t) => new Date(t.date));
     return new Date(Math.max(...dates));
   }, [data.transactions]);
-  
-  // Filter and sort bills
-  const filteredBills = useMemo(() => {
-    let filtered = [...recurringBills];
-    
-    // Apply search filter
-    if (search) {
-      filtered = filtered.filter(bill => 
-        bill.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    
-    // Apply sorting
-    switch (sortBy) {
-      case 'oldest':
-        filtered.sort((a, b) => {
-          const dateA = new Date(a.date).getDate();
-          const dateB = new Date(b.date).getDate();
-          return dateA - dateB;
-        });
-        break;
-      case 'a-z':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'z-a':
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      case 'highest':
-        filtered.sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
-        break;
-      case 'lowest':
-        filtered.sort((a, b) => Math.abs(a.amount) - Math.abs(b.amount));
-        break;
-      case 'latest':
-      default:
-        filtered.sort((a, b) => {
-          const dateA = new Date(a.date).getDate();
-          const dateB = new Date(b.date).getDate();
-          return dateA - dateB;
-        });
-        break;
-    }
-    
-    return filtered;
+
+  const summary = getBillSummary(recurringBills, referenceDate);
+
+  const visibleBills = useMemo(() => {
+    const query = search.toLowerCase();
+    const filtered = recurringBills.filter((bill) =>
+      bill.name.toLowerCase().includes(query)
+    );
+    return sortBills(filtered, sortBy);
   }, [recurringBills, search, sortBy]);
-  
-  // Calculate bills statistics
-  const billStats = useMemo(() => {
-    const currentMonth = 8; // August
-    const currentYear = 2024;
-    
-    const paidBills = recurringBills.filter(bill => {
-      const billDate = new Date(bill.date);
-      return billDate.getMonth() + 1 === currentMonth && 
-             billDate.getFullYear() === currentYear;
-    });
-    
-    const upcomingBills = recurringBills.filter(bill => {
-      const billDate = new Date(bill.date);
-      // If the bill month is in the future or this month but with a date in the future
-      return (billDate.getMonth() + 1 > currentMonth && billDate.getFullYear() === currentYear) || 
-             (billDate.getMonth() + 1 === currentMonth && billDate.getFullYear() === currentYear && 
-              billDate > new Date());
-    });
-    
-    const dueSoonBills = upcomingBills.filter(bill => {
-      const billDate = new Date(bill.date);
-      const daysDifference = Math.ceil((billDate - latestTransactionDate) / (1000 * 60 * 60 * 24));
-      return daysDifference <= 5 && daysDifference >= 0;
-    });
-    
-    const totalUpcoming = upcomingBills.reduce((total, bill) => total + Math.abs(bill.amount), 0);
-    
-    return {
-      total: recurringBills.length,
-      paid: paidBills.length,
-      upcoming: totalUpcoming.toFixed(2),
-      dueSoon: dueSoonBills.length
-    };
-  }, [recurringBills, latestTransactionDate]);
-  
-  // Sort options
-  const sortOptions = [
-    { value: 'latest', label: 'Latest' },
-    { value: 'oldest', label: 'Oldest' },
-    { value: 'a-z', label: 'A to Z' },
-    { value: 'z-a', label: 'Z to A' },
-    { value: 'highest', label: 'Highest' },
-    { value: 'lowest', label: 'Lowest' }
-  ];
-  
-  // Check if a bill is paid for the current month
-  const isBillPaid = (bill) => {
-    const billDate = new Date(bill.date);
-    const currentDate = new Date(latestTransactionDate);
-    
-    // Consider paid if the bill date is in the past compared to latest transaction
-    return billDate <= currentDate;
-  };
-  
-  // Check if a bill is due soon (within 5 days of latest transaction)
-  const isBillDueSoon = (bill) => {
-    const billDate = new Date(bill.date);
-    const daysDifference = Math.ceil((billDate - latestTransactionDate) / (1000 * 60 * 60 * 24));
-    return daysDifference <= 5 && daysDifference >= 0 && !isBillPaid(bill);
-  };
-  
+
   return (
-    <div className="recurring-bills-page">
-      <h1>Recurring Bills</h1>
-      
-      <div className="bills-summary">
-        <div className="summary-card total-bills">
-          <h2>Total Bills</h2>
-          <p className="summary-value">{billStats.total}</p>
-        </div>
-        
-        <div className="summary-details">
-          <div className="summary-item">
-            <span className="summary-label">Paid Bills</span>
-            <span className="summary-number">{billStats.paid}</span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">Total Upcoming</span>
-            <span className="summary-number">${billStats.upcoming}</span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">Due Soon</span>
-            <span className="summary-number">{billStats.dueSoon}</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="filters">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search bills"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        
-        <div className="sort-filter">
-          <label htmlFor="sort">Sort by</label>
-          <select
-            id="sort"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="sort-select"
-          >
-            {sortOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      
-      <div className="bills-list">
-        {filteredBills.length === 0 ? (
-          <div className="no-bills">
-            <p>No recurring bills found.</p>
-          </div>
-        ) : (
-          filteredBills.map((bill, index) => (
-            <div 
-              key={index} 
-              className={`bill-item ${isBillPaid(bill) ? 'paid' : isBillDueSoon(bill) ? 'due-soon' : ''}`}
-            >
-              <div className="bill-info">
-                <div className="avatar">
-                  {bill.name.charAt(0)}
-                </div>
-                <div className="bill-details">
-                  <span className="bill-name">{bill.name}</span>
-                  <span className="bill-category">{bill.category}</span>
-                </div>
+    <ErrorBoundary>
+      <div className="recurring-bills">
+        <h1 className="recurring-bills__heading">Recurring Bills</h1>
+
+        <div className="recurring-bills__layout">
+          <div className="recurring-bills__overview">
+            <Card dark className="recurring-bills__card recurring-bills__total">
+              <div className="recurring-bills__total-icon" aria-hidden="true">
+                <BillsIcon />
               </div>
-              
-              <div className="bill-date">
-                <span className="date-text">
-                  {formatDateShort(bill.date)}
-                </span>
-                <span className="status">
-                  {isBillPaid(bill) ? 'Paid' : isBillDueSoon(bill) ? 'Due Soon' : 'Upcoming'}
-                </span>
+              <div className="recurring-bills__total-texts">
+                <h2 className="recurring-bills__total-label">Total Bills</h2>
+                <p className="recurring-bills__total-value">{formatCurrency(summary.total)}</p>
               </div>
-              
-              <div className="bill-amount">
-                ${Math.abs(bill.amount).toFixed(2)}
+            </Card>
+
+            <Card light className="recurring-bills__card recurring-bills__summary">
+              <h2 className="recurring-bills__summary-heading">Summary</h2>
+              <dl className="recurring-bills__summary-list">
+                <div className="recurring-bills__summary-item">
+                  <dt>Paid Bills</dt>
+                  <dd>{formatGroup(summary.paid)}</dd>
+                </div>
+                <div className="recurring-bills__summary-item">
+                  <dt>Total Upcoming</dt>
+                  <dd>{formatGroup(summary.upcoming)}</dd>
+                </div>
+                <div className="recurring-bills__summary-item recurring-bills__summary-item--due-soon">
+                  <dt>Due Soon</dt>
+                  <dd>{formatGroup(summary.dueSoon)}</dd>
+                </div>
+              </dl>
+            </Card>
+          </div>
+
+          <Card light className="recurring-bills__card recurring-bills__list">
+            <div className="recurring-bills__filters">
+              <div className="recurring-bills__search">
+                <input
+                  type="text"
+                  placeholder="Search bills"
+                  value={rawSearch}
+                  onChange={(e) => setRawSearch(e.target.value)}
+                  className="recurring-bills__search-input"
+                  aria-label="Search bills"
+                  maxLength={100}
+                />
+                <SearchIcon className="recurring-bills__search-icon" aria-hidden="true" />
+              </div>
+
+              <div className="recurring-bills__sort">
+                <CustomDropdown
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={SORT_OPTIONS}
+                  placeholder="Select sort"
+                  label="Sort by"
+                  CaretIcon={CaretDownIcon}
+                />
               </div>
             </div>
-          ))
-        )}
+
+            <table className="recurring-bills__table" aria-label="Recurring bills">
+              <thead>
+                <tr>
+                  <th scope="col" className="recurring-bills__table-header">Bill Title</th>
+                  <th scope="col" className="recurring-bills__table-header recurring-bills__table-header--due">
+                    Due Date
+                  </th>
+                  <th scope="col" className="recurring-bills__table-header recurring-bills__table-header--amount">
+                    Amount
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleBills.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="recurring-bills__no-results">
+                      No recurring bills found
+                    </td>
+                  </tr>
+                ) : (
+                  visibleBills.map((bill) => (
+                    <BillRow
+                      key={bill.name}
+                      bill={bill}
+                      status={getBillStatus(bill.date, referenceDate)}
+                    />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </Card>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 };
 
