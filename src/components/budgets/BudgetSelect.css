@@ -1,0 +1,103 @@
+/* Dropdown used in the budget form (category and theme) */
+.budget-select__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-150);
+  width: 100%;
+  height: 45px;
+  padding: 0 calc(var(--spacing-250) + 16px + var(--spacing-200)) 0 var(--spacing-250);
+  border: 1px solid var(--color-beige-500);
+  border-radius: var(--radius-md);
+  background: var(--color-white) url('../../assets/images/icon-caret-down.svg') right var(--spacing-250) center / 12px 6px no-repeat;
+  font-family: inherit;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.budget-select__trigger:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 1px;
+  border-color: var(--color-green);
+}
+
+.budget-select__tag {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+}
+
+.budget-select__value {
+  flex: 1;
+  min-width: 0;
+}
+
+.budget-select__list {
+  position: fixed;
+  z-index: 1100; /* above .modal-backdrop */
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--spacing-150) var(--spacing-250);
+  overflow-y: auto;
+  list-style: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.budget-select__option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-150);
+  flex-shrink: 0;
+  padding: var(--spacing-150) 0;
+  border-bottom: 1px solid var(--color-border-default);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.budget-select__option:first-child {
+  padding-top: 0;
+}
+
+.budget-select__option:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.budget-select__option--active .budget-select__label {
+  text-decoration: underline;
+}
+
+.budget-select__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.budget-select__option--disabled {
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+}
+
+.budget-select__option--disabled .budget-select__tag {
+  opacity: 0.25;
+}
+
+.budget-select__hint {
+  flex-shrink: 0;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+/* The category is locked while editing, but the design shows it as a regular field */
+.budget-select__trigger:disabled {
+  cursor: default;
+}
