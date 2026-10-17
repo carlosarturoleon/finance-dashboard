@@ -228,3 +228,42 @@
   text-align: center;
   color: var(--color-text-secondary);
 }
+
+/* Tablet: 40px sides and 32px top in the design, totals side by side above the full-width list */
+@media (max-width: 1024px) {
+  .recurring-bills {
+    padding-block: var(--spacing-100) var(--spacing-200);
+    padding-inline: var(--spacing-200);
+  }
+
+  .recurring-bills__layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Grid keeps both cards the same width despite their different padding */
+  .recurring-bills__overview {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+
+  /* The total card matches the summary height with its content at the bottom */
+  .recurring-bills__total {
+    justify-content: flex-end;
+  }
+
+  .recurring-bills__list {
+    flex: none;
+  }
+
+  /* Table lines up with the card padding: no outer cell padding */
+  .recurring-bills__table-header:first-child {
+    padding-left: 0;
+  }
+
+  .recurring-bills__table-header--amount {
+    width: 116px;
+    padding-right: 0;
+  }
+}
