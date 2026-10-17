@@ -3,3 +3,5 @@ export { default as Transactions } from './Transactions';
 export { default as Budgets } from './Budgets';
 export { default as Pots } from './Pots';
 export { default as RecurringBills } from './RecurringBills';
+export { default as Login } from './Login';
+export { default as SignUp } from './SignUp';
