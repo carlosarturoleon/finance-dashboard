@@ -92,3 +92,55 @@
     padding-right: 0;
   }
 }
+
+/* Mobile: each bill becomes two lines
+   [avatar] name
+   due date ...... amount */
+@media (max-width: 767px) {
+  .bill-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title title"
+      "due   amount";
+    row-gap: var(--spacing-100);
+    align-items: start;
+    padding: var(--spacing-250) 0;
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .bill-row:first-child {
+    padding-top: 0;
+  }
+
+  .bill-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .bill-row .bill-row__cell,
+  .bill-row:first-child .bill-row__cell {
+    display: block;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .bill-row__cell--title {
+    grid-area: title;
+  }
+
+  .bill-row__cell--due {
+    grid-area: due;
+  }
+
+  .bill-row__cell--amount {
+    grid-area: amount;
+  }
+
+  .bill-row__name {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
