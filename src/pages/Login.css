@@ -222,3 +222,14 @@
     flex: 1 0 auto;
   }
 }
+
+/* Mobile: tighter page and card padding */
+@media (max-width: 767px) {
+  .login__main {
+    padding: var(--spacing-300) var(--spacing-200);
+  }
+
+  .login__card {
+    padding: var(--spacing-300) var(--spacing-250);
+  }
+}
