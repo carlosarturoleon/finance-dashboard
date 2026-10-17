@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { DataProvider } from './context/DataContext';
 import { Navigation } from './components/common';
 import ErrorBoundary from './components/common/ErrorBoundary';
-import { Dashboard, Transactions, Budgets, Pots, RecurringBills, Login } from './pages';
+import { Dashboard, Transactions, Budgets, Pots, RecurringBills, Login, SignUp } from './pages';
 import './App.css';
 
 // Pages that live inside the app shell (sidebar navigation + main content)
@@ -39,6 +39,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="*" element={<AppLayout />} />
           </Routes>
         </Router>

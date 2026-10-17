@@ -1,19 +1,19 @@
-/* Login page: full-screen layout without the app navigation */
-.login {
+/* Auth pages (Login, Sign Up): full-screen layout without the app navigation */
+.auth {
   display: flex;
   min-height: 100vh;
   background-color: var(--color-beige-100);
 }
 
 /* Illustration column */
-.login__aside {
+.auth__aside {
   flex: 1 1 0;
   max-width: 600px;
   padding: var(--spacing-250);
   display: flex;
 }
 
-.login__panel {
+.auth__panel {
   position: sticky;
   top: var(--spacing-250);
   flex: 1;
@@ -26,37 +26,37 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   background-color: var(--color-grey-900);
-  background-image: url('../assets/images/illustration-authentication.svg');
+  background-image: url('../../assets/images/illustration-authentication.svg');
   background-size: cover;
   background-position: center;
   color: var(--color-white);
 }
 
-.login__logo {
+.auth__logo {
   display: block;
   flex-shrink: 0;
 }
 
-.login__intro {
+.auth__intro {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-300);
 }
 
-.login__tagline {
+.auth__tagline {
   margin: 0;
   font: var(--text-preset-1);
   font-weight: var(--font-weight-bold);
 }
 
-.login__description {
+.auth__description {
   margin: 0;
   font: var(--text-preset-4);
   font-weight: var(--font-weight-regular);
 }
 
 /* Form column */
-.login__main {
+.auth__main {
   flex: 1 1 0;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
   padding: var(--spacing-400) var(--spacing-500);
 }
 
-.login__card {
+.auth__card {
   width: 100%;
   max-width: 560px;
   display: flex;
@@ -75,33 +75,41 @@
   background-color: var(--color-white);
 }
 
-.login__title {
+.auth__title {
   margin: 0;
   font: var(--text-preset-1);
   font-weight: var(--font-weight-bold);
   color: var(--color-grey-900);
 }
 
-.login__fields {
+.auth__fields {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-200);
 }
 
-.login__field {
+.auth__field {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-50);
 }
 
-.login__label {
+.auth__label {
   margin: 0;
   font: var(--text-preset-5-bold);
   font-weight: var(--font-weight-bold);
   color: var(--color-grey-500);
 }
 
-.login__input {
+.auth__hint {
+  margin: 0;
+  font: var(--text-preset-5);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-grey-500);
+  text-align: right;
+}
+
+.auth__input {
   /* Figma strokes sit inside the 45px field, so take the border out of the padding */
   padding: calc(var(--spacing-150) - 1px) calc(var(--spacing-250) - 1px);
   border: 1px solid var(--color-beige-500);
@@ -110,24 +118,24 @@
   color: var(--color-grey-900);
 }
 
-.login__input:focus {
+.auth__input:focus {
   border-color: var(--color-grey-900);
 }
 
-.login__input:focus-visible {
+.auth__input:focus-visible {
   outline: 2px solid var(--color-grey-900);
   outline-offset: 2px;
 }
 
-.login__password {
+.auth__password {
   position: relative;
 }
 
-.login__input--password {
+.auth__input--password {
   padding-right: calc(var(--spacing-250) + var(--spacing-200) + var(--spacing-200));
 }
 
-.login__toggle-password {
+.auth__toggle-password {
   position: absolute;
   top: 50%;
   right: var(--spacing-250);
@@ -143,13 +151,13 @@
   cursor: pointer;
 }
 
-.login__toggle-password:focus-visible {
+.auth__toggle-password:focus-visible {
   outline: 2px solid var(--color-grey-900);
   outline-offset: 2px;
   border-radius: var(--radius-default);
 }
 
-.login__submit {
+.auth__submit {
   width: 100%;
   padding: var(--spacing-200);
   border: none;
@@ -162,16 +170,16 @@
   transition: background-color var(--transition-fast);
 }
 
-.login__submit:hover {
+.auth__submit:hover {
   background-color: var(--color-grey-500);
 }
 
-.login__submit:focus-visible {
+.auth__submit:focus-visible {
   outline: 2px solid var(--color-grey-900);
   outline-offset: 2px;
 }
 
-.login__signup {
+.auth__switch {
   margin: 0;
   display: flex;
   justify-content: center;
@@ -180,30 +188,30 @@
   color: var(--color-grey-500);
 }
 
-.login__signup-link {
+.auth__switch-link {
   font-weight: var(--font-weight-bold);
   color: var(--color-grey-900);
   text-decoration: underline;
 }
 
-.login__signup-link:focus-visible {
+.auth__switch-link:focus-visible {
   outline: 2px solid var(--color-grey-900);
   outline-offset: 2px;
 }
 
 /* Tablet: the illustration panel becomes a slim header with the logo */
 @media (max-width: 1024px) {
-  .login {
+  .auth {
     flex-direction: column;
   }
 
-  .login__aside {
+  .auth__aside {
     flex: none;
     max-width: none;
     padding: 0;
   }
 
-  .login__panel {
+  .auth__panel {
     position: static;
     min-height: 0;
     max-height: none;
@@ -214,22 +222,22 @@
     background-image: none;
   }
 
-  .login__intro {
+  .auth__intro {
     display: none;
   }
 
-  .login__main {
+  .auth__main {
     flex: 1 0 auto;
   }
 }
 
 /* Mobile: tighter page and card padding */
 @media (max-width: 767px) {
-  .login__main {
+  .auth__main {
     padding: var(--spacing-300) var(--spacing-200);
   }
 
-  .login__card {
+  .auth__card {
     padding: var(--spacing-300) var(--spacing-250);
   }
 }
