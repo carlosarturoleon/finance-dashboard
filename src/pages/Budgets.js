@@ -459,7 +459,6 @@ const Budgets = () => {
                 onChange={handleFormChange}
                 pattern="(?!0+(\.0+)?$)\d+(\.\d{1,2})?"
                 title="Enter an amount greater than 0, e.g. 2000 or 49.99"
-                placeholder="e.g. 2000"
                 required
               />
             </div>
