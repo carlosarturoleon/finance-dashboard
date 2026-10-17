@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Modal from '../components/common/Modal';
+import BudgetSelect from '../components/budgets/BudgetSelect';
 import { formatDate } from '../utils/dateUtils';
 import { sortTransactionsWithinSameDay } from '../utils/transactionUtils';
 import './Budgets.css';
@@ -140,6 +141,11 @@ const Budgets = () => {
     (currentBudget && currentBudget.category === category)
   );
 
+  // Colors taken by other budgets can't be picked again
+  const usedThemes = budgets
+    .filter(budget => !currentBudget || budget.category !== currentBudget.category)
+    .map(budget => budget.theme);
+
   // Spending per budget, plus totals for the summary chart
   const budgetsWithSpending = budgets.map(budget => ({
     ...budget,
@@ -165,7 +171,7 @@ const Budgets = () => {
     setFormData({
       category: availableCategories[0],
       maximum: '',
-      theme: DEFAULT_THEME
+      theme: (THEME_COLORS.find(theme => !usedThemes.includes(theme.color)) || THEME_COLORS[0]).color
     });
   };
 
@@ -174,7 +180,7 @@ const Budgets = () => {
     setCurrentBudget(budget);
     setFormData({
       category: budget.category,
-      maximum: budget.maximum,
+      maximum: budget.maximum.toFixed(2),
       theme: budget.theme
     });
   };
@@ -188,18 +194,20 @@ const Budgets = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'maximum' ? Number(value) : value
+      [name]: value
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const budget = { ...formData, maximum: Number(formData.maximum) };
+
     if (isEditingBudget) {
-      updateBudget(formData);
+      updateBudget(budget);
       setIsEditingBudget(false);
     } else {
-      addBudget(formData);
+      addBudget(budget);
       setIsAddingBudget(false);
     }
 
@@ -425,54 +433,48 @@ const Budgets = () => {
 
         <form onSubmit={handleSubmit} className="budgets__form">
           <div className="budgets__form-group">
-            <label htmlFor="budget-category" className="budgets__form-label">Budget Category</label>
-            <select
+            <label id="budget-category-label" htmlFor="budget-category" className="budgets__form-label">Budget Category</label>
+            <BudgetSelect
               id="budget-category"
-              name="category"
-              className="budgets__form-control"
+              labelId="budget-category-label"
               value={formData.category}
-              onChange={handleFormChange}
+              options={availableCategories.map(category => ({ value: category, label: category }))}
               disabled={isEditingBudget}
-              required
-            >
-              {availableCategories.map(category => (
-                <option key={category} value={category}>{category}</option>
-              ))}
-            </select>
+              onChange={category => setFormData(prev => ({ ...prev, category }))}
+            />
           </div>
 
           <div className="budgets__form-group">
             <label htmlFor="budget-maximum" className="budgets__form-label">Maximum Spend</label>
-            <input
-              type="number"
-              id="budget-maximum"
-              name="maximum"
-              className="budgets__form-control"
-              value={formData.maximum}
-              onChange={handleFormChange}
-              min="1"
-              step="0.01"
-              placeholder="e.g. 2000"
-              required
-            />
+            <div className="budgets__form-money">
+              <span className="budgets__form-currency" aria-hidden="true">$</span>
+              {/* Text input so the amount keeps a "." decimal separator in every browser locale */}
+              <input
+                type="text"
+                inputMode="decimal"
+                id="budget-maximum"
+                name="maximum"
+                className="budgets__form-control budgets__form-control--money"
+                value={formData.maximum}
+                onChange={handleFormChange}
+                pattern="(?!0+(\.0+)?$)\d+(\.\d{1,2})?"
+                title="Enter an amount greater than 0, e.g. 2000 or 49.99"
+                required
+              />
+            </div>
           </div>
 
-          <fieldset className="budgets__form-group budgets__form-fieldset">
-            <legend className="budgets__form-label">Theme</legend>
-            <div className="budgets__themes">
-              {THEME_COLORS.map(theme => (
-                <button
-                  type="button"
-                  key={theme.color}
-                  className={`budgets__theme ${formData.theme === theme.color ? 'budgets__theme--selected' : ''}`}
-                  style={{ backgroundColor: theme.color }}
-                  onClick={() => setFormData(prev => ({ ...prev, theme: theme.color }))}
-                  aria-label={theme.name}
-                  aria-pressed={formData.theme === theme.color}
-                />
-              ))}
-            </div>
-          </fieldset>
+          <div className="budgets__form-group">
+            <label id="budget-theme-label" htmlFor="budget-theme" className="budgets__form-label">Theme</label>
+            <BudgetSelect
+              id="budget-theme"
+              labelId="budget-theme-label"
+              value={formData.theme}
+              options={THEME_COLORS.map(theme => ({ value: theme.color, label: theme.name, color: theme.color }))}
+              disabledValues={usedThemes}
+              onChange={theme => setFormData(prev => ({ ...prev, theme }))}
+            />
+          </div>
 
           <button type="submit" className="budgets__primary-button">
             {isAddingBudget ? 'Add Budget' : 'Save Changes'}
@@ -484,7 +486,7 @@ const Budgets = () => {
       <Modal
         isOpen={isDeletingBudget && Boolean(currentBudget)}
         onClose={handleCancel}
-        title={currentBudget ? `Delete '${currentBudget.category}'?` : ''}
+        title={currentBudget ? `Delete ‘${currentBudget.category}’?` : ''}
         className="budgets__modal"
       >
         <p className="budgets__modal-text">

@@ -68,12 +68,13 @@
 
 .budgets__text-button {
   width: 100%;
-  padding: var(--spacing-100);
+  padding: 0;
   border: none;
   background: none;
   color: var(--color-text-secondary);
   font-family: inherit;
   font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
   line-height: var(--line-height-150);
   cursor: pointer;
 }
@@ -336,10 +337,12 @@
   border: none;
   border-bottom: 1px solid var(--color-border-default);
   background: none;
+  justify-content: flex-start; /* override the global centered button */
   text-align: left;
   white-space: nowrap;
   font-family: inherit;
   font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
   line-height: var(--line-height-150);
   color: var(--color-text-primary);
   cursor: pointer;
@@ -563,6 +566,41 @@
 /* Modals */
 .budgets__modal {
   max-width: 560px;
+  border-radius: var(--radius-lg);
+}
+
+.budgets__modal .modal-header {
+  padding: var(--spacing-400) var(--spacing-400) 0;
+  border-bottom: none;
+  background-color: transparent;
+}
+
+.budgets__modal .modal-title {
+  font-size: var(--font-size-32);
+  line-height: var(--line-height-120);
+}
+
+/* Swap the shared "×" for the design's circled close icon */
+.budgets__modal .modal-close {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  font-size: 0;
+  background: url('../assets/images/icon-close-modal.svg') center / 26px 26px no-repeat;
+}
+
+.budgets__modal .modal-close:hover {
+  background-color: var(--color-grey-100);
+}
+
+/* The focus trap focuses this button on open; only show the ring for keyboard users */
+.budgets__modal .modal-close:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.budgets__modal .modal-content {
+  padding: var(--spacing-250) var(--spacing-400) var(--spacing-400);
 }
 
 .budgets__modal-text {
@@ -584,13 +622,8 @@
   gap: var(--spacing-50);
 }
 
-.budgets__form-fieldset {
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-
 .budgets__form-label {
+  margin: 0;
   padding: 0;
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-bold);
@@ -606,7 +639,12 @@
   background-color: var(--color-white);
   font-family: inherit;
   font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
   color: var(--color-text-primary);
+}
+
+.budgets__form-control::placeholder {
+  color: var(--color-beige-500);
 }
 
 .budgets__form-control:focus {
@@ -620,40 +658,35 @@
   color: var(--color-text-secondary);
 }
 
-.budgets__themes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-150);
-  margin-top: var(--spacing-50);
+/* "$" prefix inside the maximum spend field */
+.budgets__form-money {
+  position: relative;
 }
 
-.budgets__theme {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 2px solid transparent;
-  border-radius: var(--radius-full);
-  cursor: pointer;
+.budgets__form-currency {
+  position: absolute;
+  top: 50%;
+  left: var(--spacing-250);
+  transform: translateY(-50%);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-beige-500);
+  pointer-events: none;
 }
 
-.budgets__theme--selected {
-  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-grey-900);
-}
-
-.budgets__theme:focus-visible {
-  outline: 2px solid var(--color-green);
-  outline-offset: 4px;
+.budgets__form-control--money {
+  padding-left: calc(var(--spacing-250) + 8px + var(--spacing-150));
 }
 
 .budgets__primary-button {
-  margin-top: var(--spacing-100);
+  margin-top: var(--spacing-50);
   width: 100%;
 }
 
 .budgets__modal-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-200);
+  gap: var(--spacing-250);
 }
 
 /* Tablet: stack summary above the budget list */
