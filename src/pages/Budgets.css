@@ -722,6 +722,34 @@
   .budget-card__transaction {
     gap: var(--spacing-150);
   }
+
+  /* Keep budget modals centered with side margins instead of the shared bottom sheet */
+  .modal-backdrop:has(.budgets__modal) {
+    align-items: center;
+    padding: var(--spacing-250);
+  }
+
+  .budgets__modal {
+    border-radius: var(--radius-lg);
+    max-height: 90vh;
+  }
+
+  .budgets__modal .modal-header {
+    gap: var(--spacing-200);
+    padding: var(--spacing-300) var(--spacing-250) 0;
+  }
+
+  .budgets__modal .modal-title {
+    font-size: var(--font-size-20);
+  }
+
+  .budgets__modal .modal-close {
+    flex-shrink: 0;
+  }
+
+  .budgets__modal .modal-content {
+    padding: var(--spacing-250) var(--spacing-250) var(--spacing-300);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
