@@ -20,7 +20,7 @@ describe('RecurringBills Page', () => {
   test('shows the total and the summary from the sample data', () => {
     renderPage();
 
-    expect(screen.getByRole('heading', { name: 'Recurring Bills' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Recurring bills' })).toBeInTheDocument();
     expect(screen.getByText('$384.98')).toBeInTheDocument();
     expect(screen.getByText('4 ($190.00)')).toBeInTheDocument();
     expect(screen.getByText('4 ($194.98)')).toBeInTheDocument();

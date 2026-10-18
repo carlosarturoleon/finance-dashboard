@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import BillRow from '../BillRow';
 import { BILL_STATUS } from '../../../utils/billUtils';
+import { formatDateTime } from '../../../utils/dateUtils';
 
 const bill = {
   name: 'Spark Electric Solutions',
@@ -19,11 +20,11 @@ const renderRow = (status, overrides = {}) =>
   );
 
 describe('BillRow Component', () => {
-  test('shows the name, monthly due date and amount', () => {
+  test('shows the name, due date with time and amount', () => {
     renderRow(BILL_STATUS.PAID);
 
     expect(screen.getByText('Spark Electric Solutions')).toBeInTheDocument();
-    expect(screen.getByText('Monthly - 2nd')).toBeInTheDocument();
+    expect(screen.getByText(formatDateTime(bill.date))).toBeInTheDocument();
     expect(screen.getByText('$100.00')).toBeInTheDocument();
   });
 

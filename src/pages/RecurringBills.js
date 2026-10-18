@@ -43,7 +43,7 @@ const RecurringBills = () => {
   return (
     <ErrorBoundary>
       <div className="recurring-bills">
-        <h1 className="recurring-bills__heading">Recurring Bills</h1>
+        <h1 className="recurring-bills__heading">Recurring bills</h1>
 
         <div className="recurring-bills__layout">
           <div className="recurring-bills__overview">
@@ -52,7 +52,7 @@ const RecurringBills = () => {
                 <BillsIcon />
               </div>
               <div className="recurring-bills__total-texts">
-                <h2 className="recurring-bills__total-label">Total Bills</h2>
+                <h2 className="recurring-bills__total-label">Total bills</h2>
                 <p className="recurring-bills__total-value">{formatCurrency(summary.total)}</p>
               </div>
             </Card>
@@ -69,7 +69,7 @@ const RecurringBills = () => {
                   <dd>{formatGroup(summary.upcoming)}</dd>
                 </div>
                 <div className="recurring-bills__summary-item recurring-bills__summary-item--due-soon">
-                  <dt>Due Soon</dt>
+                  <dt>Due soon</dt>
                   <dd>{formatGroup(summary.dueSoon)}</dd>
                 </div>
               </dl>
