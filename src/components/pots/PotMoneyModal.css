@@ -1,0 +1,111 @@
+/* Pot Money Modal - BEM approach */
+
+/* New amount and progress preview, 114px tall in the design */
+.pot-money__summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-200);
+  min-height: 114px;
+  margin-bottom: var(--spacing-250);
+}
+
+.pot-money__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-200);
+}
+
+.pot-money__total-label {
+  margin: 0;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+.pot-money__total-amount {
+  margin: 0;
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.pot-money__bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 13px; /* 13px in the design */
+}
+
+.pot-money__bar {
+  display: flex;
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--radius-default);
+  background-color: var(--color-beige-100);
+}
+
+.pot-money__bar-kept {
+  height: 100%;
+  background-color: var(--color-grey-900);
+}
+
+/* 2px light gap between what stays and what changes */
+.pot-money__bar-change {
+  height: 100%;
+  border-left: 2px solid var(--color-grey-100);
+  border-radius: 0 var(--radius-default) var(--radius-default) 0;
+}
+
+.pot-money__bar-change--add {
+  background-color: var(--color-green);
+}
+
+.pot-money__bar-change--withdraw {
+  background-color: var(--color-red);
+}
+
+.pot-money__bar-texts {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-100);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+}
+
+.pot-money__percentage,
+.pot-money__target {
+  margin: 0;
+}
+
+.pot-money__percentage {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.pot-money__percentage--add {
+  color: var(--color-green);
+}
+
+.pot-money__percentage--withdraw {
+  color: var(--color-red);
+}
+
+.pot-money__target {
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+.pot-money__error {
+  margin: 0;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+  color: var(--color-red);
+}
+
+.pot-form__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
