@@ -54,6 +54,7 @@
 
 /* 2px light gap between what stays and what changes */
 .pot-money__bar-change {
+  box-sizing: content-box; /* keep the gap from covering small amounts */
   height: 100%;
   border-left: 2px solid var(--color-grey-100);
   border-radius: 0 var(--radius-default) var(--radius-default) 0;
