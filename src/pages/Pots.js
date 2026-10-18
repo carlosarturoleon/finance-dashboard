@@ -267,27 +267,26 @@ const Pots = () => {
       </Modal>
 
       {/* Delete Pot Confirmation Modal */}
-      {isDeletingPot && currentPot && (
-        <div className="modal-backdrop">
-          <div className="modal delete-modal">
-            <h2>Delete '{currentPot.name}'</h2>
-            <p className="modal-subtitle">
-              Are you sure you want to delete this pot? This action cannot be reversed, 
-              and all the data inside it will be removed forever.
-            </p>
-            
-            <div className="delete-actions">
-              <button onClick={handleConfirmDelete} className="delete-confirm-btn">
-                Yes, Confirm Deletion
-              </button>
-              <button onClick={handleCancel} className="cancel-btn">
-                No, Go Back
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={isDeletingPot && Boolean(currentPot)}
+        onClose={handleCancel}
+        title={currentPot ? `Delete ‘${currentPot.name}’?` : ''}
+        className="pots__modal"
+      >
+        <p className="pots__modal-text">
+          Are you sure you want to delete this pot? This action cannot be reversed,
+          and all the data inside it will be removed forever.
+        </p>
+        <div className="pots__modal-actions">
+          <button type="button" onClick={handleConfirmDelete} className="pots__danger-button">
+            Yes, Confirm Deletion
+          </button>
+          <button type="button" onClick={handleCancel} className="pots__text-button">
+            No, I want to go back
+          </button>
         </div>
-      )}
-      
+      </Modal>
+
       {/* Add Money Modal */}
       {isAddingMoney && currentPot && (
         <div className="modal-backdrop">
