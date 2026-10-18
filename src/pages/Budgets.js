@@ -498,7 +498,7 @@ const Budgets = () => {
             Yes, Confirm Deletion
           </button>
           <button type="button" onClick={handleCancel} className="budgets__text-button">
-            No, Go Back
+            No, I want to go back
           </button>
         </div>
       </Modal>
