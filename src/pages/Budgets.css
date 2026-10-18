@@ -713,6 +713,11 @@
     padding: var(--spacing-300) var(--spacing-250);
   }
 
+  /* Date only, so payee names have room on narrow screens */
+  .budget-card__transaction-time {
+    display: none;
+  }
+
   .budgets__summary {
     flex-direction: column;
     align-items: stretch;
