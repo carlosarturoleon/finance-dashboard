@@ -1,7 +1,29 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import PotCard from '../components/pots/PotCard';
+import Modal from '../components/common/Modal';
+import BudgetSelect from '../components/budgets/BudgetSelect';
 import './Pots.css';
+
+const POT_NAME_MAX_LENGTH = 30;
+
+// Same palette as the budgets form, so existing pot themes show as selected
+const THEME_COLORS = [
+  { name: 'Green', color: '#277C78' },
+  { name: 'Yellow', color: '#F2CDAC' },
+  { name: 'Cyan', color: '#82C9D7' },
+  { name: 'Navy', color: '#626070' },
+  { name: 'Red', color: '#C94736' },
+  { name: 'Purple', color: '#826CB0' },
+  { name: 'Turquoise', color: '#597C7C' },
+  { name: 'Brown', color: '#93674F' },
+  { name: 'Magenta', color: '#934F6F' },
+  { name: 'Blue', color: '#3F82B2' },
+  { name: 'Navy Grey', color: '#97A0AC' },
+  { name: 'Army Green', color: '#7F9161' },
+  { name: 'Gold', color: '#CAB361' },
+  { name: 'Orange', color: '#BE6C49' }
+];
 
 const Pots = () => {
   const { data, addPot, updatePot, deletePot, addToPot, withdrawFromPot } = useData();
@@ -25,32 +47,21 @@ const Pots = () => {
   // Money operation state
   const [moneyAmount, setMoneyAmount] = useState('');
   
-  // Theme colors
-  const themeColors = [
-    { name: 'Green', color: '#277C78' },
-    { name: 'Yellow', color: '#F4BC52' },
-    { name: 'Cyan', color: '#82C9D7' },
-    { name: 'Navy', color: '#626070' },
-    { name: 'Red', color: '#E36666' },
-    { name: 'Purple', color: '#826CB0' },
-    { name: 'Turquoise', color: '#5AC5C5' },
-    { name: 'Brown', color: '#BA9367' },
-    { name: 'Magenta', color: '#AD5D79' },
-    { name: 'Blue', color: '#5C7BC3' },
-    { name: 'Navy Grey', color: '#4B4D58' },
-    { name: 'Army Green', color: '#636E51' },
-    { name: 'Pink', color: '#E2949B' },
-    { name: 'Gold', color: '#D5A44A' },
-    { name: 'Orange', color: '#E98852' }
-  ];
-  
+  // Colors taken by other pots can't be picked again
+  const usedThemes = pots
+    .filter(pot => !currentPot || pot.name !== currentPot.name)
+    .map(pot => pot.theme);
+
+  const firstFreeTheme = () =>
+    (THEME_COLORS.find(theme => !usedThemes.includes(theme.color)) || THEME_COLORS[0]).color;
+
   const handleAddPot = () => {
     setIsAddingPot(true);
     setFormData({
       name: '',
       target: '',
       total: 0,
-      theme: '#277C78'
+      theme: firstFreeTheme()
     });
   };
   
@@ -84,10 +95,7 @@ const Pots = () => {
   
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'target' ? Number(value) : value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
   
   const handleMoneyAmountChange = (e) => {
@@ -97,12 +105,14 @@ const Pots = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    const pot = { ...formData, target: Number(formData.target) };
+
     if (isEditingPot) {
-      updatePot(formData);
+      updatePot(pot);
       setIsEditingPot(false);
     } else {
       addPot({
-        ...formData,
+        ...pot,
         total: 0
       });
       setIsAddingPot(false);
@@ -186,71 +196,76 @@ const Pots = () => {
       )}
       
       {/* Add/Edit Pot Modal */}
-      {(isAddingPot || isEditingPot) && (
-        <div className="modal-backdrop">
-          <div className="modal">
-            <h2>{isAddingPot ? 'Add New Pot' : 'Edit Pot'}</h2>
-            <p className="modal-subtitle">
-              {isAddingPot 
-                ? 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'
-                : 'If your saving targets change, feel free to update your pots.'}
+      <Modal
+        isOpen={isAddingPot || isEditingPot}
+        onClose={handleCancel}
+        title={isAddingPot ? 'Add New Pot' : 'Edit Pot'}
+        className="pots__modal"
+      >
+        <p className="pots__modal-text">
+          {isAddingPot
+            ? 'Create a pot to set savings targets. These can help keep you on track as you save for special purchases.'
+            : 'If your saving targets change, feel free to update your pots.'}
+        </p>
+
+        <form onSubmit={handleSubmit} className="pots__form">
+          <div className="pots__form-group">
+            <label htmlFor="pot-name" className="pots__form-label">Pot Name</label>
+            <input
+              type="text"
+              id="pot-name"
+              name="name"
+              className="pots__form-control"
+              value={formData.name}
+              onChange={handleFormChange}
+              maxLength={POT_NAME_MAX_LENGTH}
+              aria-describedby="pot-name-count"
+              disabled={isEditingPot}
+              required
+            />
+            <p id="pot-name-count" className="pots__form-hint">
+              {POT_NAME_MAX_LENGTH - formData.name.length} of {POT_NAME_MAX_LENGTH} characters left
             </p>
-            
-            <form onSubmit={handleSubmit} className="pot-form">
-              <div className="form-group">
-                <label htmlFor="name">Pot Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleFormChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="target">Target</label>
-                <input
-                  type="number"
-                  id="target"
-                  name="target"
-                  value={formData.target}
-                  onChange={handleFormChange}
-                  min="1"
-                  step="0.01"
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Theme</label>
-                <div className="theme-colors">
-                  {themeColors.map(theme => (
-                    <div 
-                      key={theme.color}
-                      className={`theme-color ${formData.theme === theme.color ? 'selected' : ''}`}
-                      style={{ backgroundColor: theme.color }}
-                      onClick={() => setFormData(prev => ({ ...prev, theme: theme.color }))}
-                      title={theme.name}
-                    ></div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="form-actions">
-                <button type="submit" className="submit-btn">
-                  {isAddingPot ? 'Add Pot' : 'Save Changes'}
-                </button>
-                <button type="button" onClick={handleCancel} className="cancel-btn">
-                  Cancel
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
-      )}
-      
+
+          <div className="pots__form-group">
+            <label htmlFor="pot-target" className="pots__form-label">Target</label>
+            <div className="pots__form-money">
+              <span className="pots__form-currency" aria-hidden="true">$</span>
+              {/* Text input so the amount keeps a "." decimal separator in every browser locale */}
+              <input
+                type="text"
+                inputMode="decimal"
+                id="pot-target"
+                name="target"
+                className="pots__form-control pots__form-control--money"
+                value={formData.target}
+                onChange={handleFormChange}
+                pattern="(?!0+(\.0+)?$)\d+(\.\d{1,2})?"
+                title="Enter an amount greater than 0, e.g. 2000 or 49.99"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="pots__form-group">
+            <label id="pot-theme-label" htmlFor="pot-theme" className="pots__form-label">Color Tag</label>
+            <BudgetSelect
+              id="pot-theme"
+              labelId="pot-theme-label"
+              value={formData.theme}
+              options={THEME_COLORS.map(theme => ({ value: theme.color, label: theme.name, color: theme.color }))}
+              disabledValues={usedThemes}
+              onChange={theme => setFormData(prev => ({ ...prev, theme }))}
+            />
+          </div>
+
+          <button type="submit" className="pots__primary-button">
+            {isAddingPot ? 'Add Pot' : 'Save Changes'}
+          </button>
+        </form>
+      </Modal>
+
       {/* Delete Pot Confirmation Modal */}
       {isDeletingPot && currentPot && (
         <div className="modal-backdrop">

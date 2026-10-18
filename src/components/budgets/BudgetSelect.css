@@ -18,6 +18,10 @@
   cursor: pointer;
 }
 
+.budget-select__trigger:hover:not(:disabled) {
+  border-color: var(--color-grey-500);
+}
+
 .budget-select__trigger:focus-visible {
   outline: 2px solid var(--color-green);
   outline-offset: 1px;
