@@ -1,5 +1,10 @@
 /* Pot Modal - shared frame for the pot modals - BEM approach */
 
+/* The design has a plain dimmed overlay; the shared blur also mirrors the page in scaled Chrome views */
+.modal-backdrop:has(.pot-modal) {
+  backdrop-filter: none;
+}
+
 /* Match the shared modal to the design: 32px padding, 20px between sections */
 .modal.pot-modal {
   display: flex;
