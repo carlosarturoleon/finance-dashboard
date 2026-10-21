@@ -1,0 +1,188 @@
+/* Pot Form Modal - BEM approach */
+
+/* Form */
+.pot-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-250);
+}
+
+.pot-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-50);
+}
+
+/* The three fields sit 16px apart; the button is 20px below them */
+.pot-form__group + .pot-form__group {
+  margin-top: calc(var(--spacing-200) - var(--spacing-250));
+}
+
+.pot-form__label {
+  margin: 0;
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+.pot-form__field {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-150);
+  width: 100%;
+  /* Figma draws the border inside the box, so take 1px off the padding */
+  padding: calc(var(--spacing-150) - 1px) calc(var(--spacing-250) - 1px);
+  border: 1px solid var(--color-beige-500);
+  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+}
+
+.pot-form__field:focus-within {
+  border-color: var(--color-grey-900);
+}
+
+.pot-form__input {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+}
+
+/* Inside a wrapper field the input itself has no box */
+.pot-form__money .pot-form__input {
+  padding: 0;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.pot-form__input::placeholder {
+  color: var(--color-beige-500);
+  opacity: 1;
+}
+
+.pot-form__currency {
+  color: var(--color-beige-500);
+}
+
+.pot-form__hint {
+  margin: 0;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+/* Theme dropdown */
+.pot-form__theme {
+  position: relative;
+}
+
+.pot-form__theme-button {
+  cursor: pointer;
+  text-align: left;
+}
+
+.pot-form__theme-name {
+  flex: 1;
+}
+
+.pot-form__theme-dot {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+}
+
+.pot-form__caret {
+  flex-shrink: 0;
+  margin-left: var(--spacing-200);
+}
+
+.pot-form__theme-list {
+  position: absolute;
+  top: calc(100% + var(--spacing-200));
+  left: 0;
+  right: 0;
+  z-index: 10;
+  max-height: 240px;
+  margin: 0;
+  padding: var(--spacing-150) var(--spacing-250);
+  overflow-y: auto;
+  list-style: none;
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-dropdown);
+}
+
+.pot-form__theme-list li + li {
+  margin-top: var(--spacing-150);
+  padding-top: var(--spacing-150);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.pot-form__theme-option {
+  display: flex;
+  align-items: center;
+  /* global.css centers button content */
+  justify-content: flex-start;
+  gap: var(--spacing-150);
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-150);
+  color: var(--color-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.pot-form__theme-option[aria-selected='true'] {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Submit */
+.pot-form__submit {
+  width: 100%;
+  padding: var(--spacing-200);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-grey-900);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-150);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.pot-form__submit:hover {
+  background-color: var(--color-grey-500);
+}
+
+.pot-form__theme-button:focus-visible,
+.pot-form__theme-option:focus-visible,
+.pot-form__submit:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
+
+/* Mobile: the modal sits at the bottom of the screen, so open the theme list upward */
+@media (max-width: 767px) {
+  .pot-form__theme-list {
+    top: auto;
+    bottom: calc(100% + var(--spacing-200));
+  }
+}

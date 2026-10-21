@@ -62,12 +62,12 @@ export const DataProvider = ({ children }) => {
     }));
   };
 
-  // Function to update a pot
-  const updatePot = (updatedPot) => {
+  // Function to update a pot (pass originalName when the pot is renamed)
+  const updatePot = (updatedPot, originalName = updatedPot.name) => {
     setData(prevData => ({
       ...prevData,
-      pots: prevData.pots.map(pot => 
-        pot.name === updatedPot.name ? updatedPot : pot
+      pots: prevData.pots.map(pot =>
+        pot.name === originalName ? updatedPot : pot
       )
     }));
   };

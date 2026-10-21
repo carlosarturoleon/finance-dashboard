@@ -1,0 +1,78 @@
+/* Pot Modal - shared frame for the pot modals - BEM approach */
+
+/* The design has a plain dimmed overlay; the shared blur also mirrors the page in scaled Chrome views */
+.modal-backdrop:has(.pot-modal) {
+  backdrop-filter: none;
+}
+
+/* Match the shared modal to the design: 32px padding, 20px between sections */
+.modal.pot-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-250);
+  max-width: 560px;
+  padding: var(--spacing-400);
+  border-radius: var(--radius-lg);
+  overflow: visible;
+}
+
+.pot-modal .modal-header {
+  padding: 0;
+  border-bottom: none;
+  background-color: transparent;
+}
+
+.pot-modal .modal-title {
+  font-size: var(--font-size-32);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-120);
+  color: var(--color-text-primary);
+}
+
+.pot-modal .modal-close {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-full);
+}
+
+/* The modal focuses this button on open; only show a ring for keyboard users */
+.pot-modal .modal-close:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.pot-modal .modal-content {
+  padding: 0;
+  max-height: none;
+  overflow: visible;
+}
+
+.pot-modal__text {
+  margin: 0 0 var(--spacing-250);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  color: var(--color-text-secondary);
+}
+
+.pot-modal .modal-close:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
+
+/* Mobile: a centered card 20px from the screen edges instead of the shared bottom sheet */
+@media (max-width: 767px) {
+  .modal-backdrop:has(.pot-modal) {
+    align-items: center;
+    padding: 0 var(--spacing-250);
+  }
+
+  .modal.pot-modal {
+    padding: var(--spacing-300) var(--spacing-250);
+    border-radius: var(--radius-lg);
+    animation: modal-in 0.3s ease-out;
+  }
+
+  .pot-modal .modal-title {
+    font-size: var(--font-size-20);
+  }
+}
