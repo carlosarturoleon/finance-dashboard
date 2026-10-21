@@ -8,7 +8,8 @@
   padding: 0 calc(var(--spacing-250) + 16px + var(--spacing-200)) 0 var(--spacing-250);
   border: 1px solid var(--color-beige-500);
   border-radius: var(--radius-md);
-  background: var(--color-white) url('../../assets/images/icon-caret-down.svg') right var(--spacing-250) center / 12px 6px no-repeat;
+  position: relative;
+  background-color: var(--color-white);
   font-family: inherit;
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
@@ -16,6 +17,22 @@
   color: var(--color-text-primary);
   text-align: left;
   cursor: pointer;
+}
+
+/* Caret points up while the list is open, as in the design */
+.budget-select__trigger::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: var(--spacing-250);
+  width: 12px;
+  height: 6px;
+  margin-top: -3px;
+  background: url('../../assets/images/icon-caret-down.svg') center / 12px 6px no-repeat;
+}
+
+.budget-select__trigger--open::after {
+  transform: rotate(180deg);
 }
 
 .budget-select__trigger:hover:not(:disabled) {
@@ -92,6 +109,13 @@
 
 .budget-select__option--disabled .budget-select__tag {
   opacity: 0.25;
+}
+
+.budget-select__check {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  background: url('../../assets/images/icon-selected.svg') center / 13px 13px no-repeat;
 }
 
 .budget-select__hint {

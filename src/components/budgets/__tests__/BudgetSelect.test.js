@@ -46,6 +46,18 @@ describe('BudgetSelect Component', () => {
       expect(screen.getByRole('option', { name: /Green/ })).toHaveAttribute('aria-disabled', 'true');
       expect(screen.getByRole('option', { name: /Red/ })).toHaveAttribute('aria-selected', 'true');
     });
+
+    test('shows a check mark only on the selected theme and flips the caret while open', () => {
+      const { trigger } = renderBudgetSelect();
+      expect(trigger).not.toHaveClass('budget-select__trigger--open');
+
+      fireEvent.click(trigger);
+
+      expect(trigger).toHaveClass('budget-select__trigger--open');
+      const checks = document.querySelectorAll('.budget-select__check');
+      expect(checks).toHaveLength(1);
+      expect(screen.getByRole('option', { name: /Red/ })).toContainElement(checks[0]);
+    });
   });
 
   test('does not open when disabled', () => {
