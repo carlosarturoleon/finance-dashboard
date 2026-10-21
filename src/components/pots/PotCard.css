@@ -62,7 +62,7 @@
 
 .pot-card__menu-list {
   position: absolute;
-  top: calc(100% + var(--spacing-150));
+  top: calc(100% + var(--spacing-250));
   right: 0;
   z-index: 10;
   min-width: 114px;
