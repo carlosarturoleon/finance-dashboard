@@ -212,7 +212,7 @@ const Dashboard = () => {
                 {/* Right column - Pot items in 2 columns */}
                 <div className="pots-list-grid">
                   {/* Display pots in specific order */}
-                  {['Savings', 'Gift', 'Concert Ticket', 'New Laptop'].map(potName => {
+                  {['Savings', 'Christmas Gift', 'Concert Ticket', 'New Laptop'].map(potName => {
                     const pot = pots.find(p => p.name === potName);
                     if (!pot) return null;
                     
