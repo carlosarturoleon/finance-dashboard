@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { BILL_STATUS, formatCurrency, formatDueDate } from '../../utils/billUtils';
+import { BILL_STATUS, formatCurrency } from '../../utils/billUtils';
+import { formatDateTime } from '../../utils/dateUtils';
 import { ReactComponent as PaidIcon } from '../../assets/images/icon-bill-paid.svg';
 import { ReactComponent as DueIcon } from '../../assets/images/icon-bill-due.svg';
 import './BillRow.css';
@@ -36,7 +37,7 @@ const BillRow = ({ bill, status }) => {
       </td>
       <td className="bill-row__cell bill-row__cell--due">
         <div className="bill-row__due">
-          <span>{formatDueDate(bill.date)}</span>
+          <span>{formatDateTime(bill.date)}</span>
           {status === BILL_STATUS.PAID && (
             <PaidIcon className="bill-row__status-icon" aria-hidden="true" />
           )}
