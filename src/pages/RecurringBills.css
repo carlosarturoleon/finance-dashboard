@@ -193,9 +193,53 @@
   outline-offset: 2px;
 }
 
+.recurring-bills__sort .dropdown__selected:hover,
+.recurring-bills__sort .dropdown__selected[aria-expanded="true"] {
+  border-color: var(--color-grey-900);
+}
+
+/* Caret points up while the menu is open */
+.recurring-bills__sort .dropdown__selected svg {
+  transition: transform var(--transition-fast);
+}
+
+.recurring-bills__sort .dropdown__selected[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
 .recurring-bills__sort .dropdown__menu {
   left: auto;
   right: 0;
+  width: 114px;
+  min-width: 0;
+  margin-top: var(--spacing-200);
+  padding: var(--spacing-150) var(--spacing-250);
+  box-shadow: var(--shadow-dropdown);
+}
+
+.recurring-bills__sort .dropdown__item {
+  padding: 0;
+  line-height: var(--line-height-150);
+}
+
+.recurring-bills__sort .dropdown__item + .dropdown__item {
+  margin-top: var(--spacing-150);
+  padding-top: var(--spacing-150);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.recurring-bills__sort .dropdown__item::after {
+  display: none;
+}
+
+.recurring-bills__sort .dropdown__item:hover {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+}
+
+.recurring-bills__sort .dropdown__item:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
 }
 
 .recurring-bills__table {
