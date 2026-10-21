@@ -434,7 +434,7 @@ const Budgets = () => {
 
         <form onSubmit={handleSubmit} className="budgets__form">
           <div className="budgets__form-group">
-            <label id="budget-category-label" htmlFor="budget-category" className="budgets__form-label">Budget Category</label>
+            <label id="budget-category-label" htmlFor="budget-category" className="budgets__form-label">Budget Name</label>
             <BudgetSelect
               id="budget-category"
               labelId="budget-category-label"
@@ -446,7 +446,7 @@ const Budgets = () => {
           </div>
 
           <div className="budgets__form-group">
-            <label htmlFor="budget-maximum" className="budgets__form-label">Maximum Spend</label>
+            <label htmlFor="budget-maximum" className="budgets__form-label">Maximum Spending</label>
             <div className="budgets__form-money">
               <span className="budgets__form-currency" aria-hidden="true">$</span>
               {/* Text input so the amount keeps a "." decimal separator in every browser locale */}
@@ -466,7 +466,7 @@ const Budgets = () => {
           </div>
 
           <div className="budgets__form-group">
-            <label id="budget-theme-label" htmlFor="budget-theme" className="budgets__form-label">Theme</label>
+            <label id="budget-theme-label" htmlFor="budget-theme" className="budgets__form-label">Color Tag</label>
             <BudgetSelect
               id="budget-theme"
               labelId="budget-theme-label"
@@ -499,7 +499,7 @@ const Budgets = () => {
             Yes, Confirm Deletion
           </button>
           <button type="button" onClick={handleCancel} className="budgets__text-button">
-            No, Go Back
+            No, I want to go back
           </button>
         </div>
       </Modal>
