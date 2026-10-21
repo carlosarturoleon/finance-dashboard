@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Modal from '../components/common/Modal';
 import BudgetSelect from '../components/budgets/BudgetSelect';
-import { formatDate } from '../utils/dateUtils';
+import { formatDate, formatTime } from '../utils/dateUtils';
 import { sortTransactionsWithinSameDay } from '../utils/transactionUtils';
 import './Budgets.css';
 
@@ -354,7 +354,7 @@ const Budgets = () => {
                       <div className="budget-card__stat">
                         <span className="budgets__color-bar budgets__color-bar--neutral" aria-hidden="true" />
                         <div className="budget-card__stat-texts">
-                          <span className="budget-card__stat-label">Remaining</span>
+                          <span className="budget-card__stat-label">Free</span>
                           <span className="budget-card__stat-value">{formatMoney(remaining)}</span>
                         </div>
                       </div>
@@ -402,6 +402,7 @@ const Budgets = () => {
                               </span>
                               <time className="budget-card__transaction-date" dateTime={transaction.date}>
                                 {formatDate(transaction.date)}
+                                <span className="budget-card__transaction-time">, {formatTime(transaction.date)}</span>
                               </time>
                             </div>
                           </li>

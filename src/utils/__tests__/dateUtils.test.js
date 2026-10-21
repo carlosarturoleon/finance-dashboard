@@ -1,4 +1,4 @@
-import { formatDate, formatDateShort } from '../dateUtils';
+import { formatDate, formatDateShort, formatTime, formatDateTime } from '../dateUtils';
 
 describe('dateUtils', () => {
   describe('formatDate', () => {
@@ -121,6 +121,25 @@ describe('dateUtils', () => {
       expect(() => formatDate(undefined)).not.toThrow();
       expect(() => formatDateShort(null)).not.toThrow();
       expect(() => formatDateShort(undefined)).not.toThrow();
+    });
+  });
+
+  describe('formatTime', () => {
+    test('formats 24-hour time', () => {
+      const isoDate = new Date(2024, 7, 29, 21, 45).toISOString();
+      expect(formatTime(isoDate)).toBe('21:45');
+    });
+  });
+
+  describe('formatDateTime', () => {
+    test('formats date with 24-hour time', () => {
+      const isoDate = new Date(2024, 7, 29, 21, 45).toISOString();
+      expect(formatDateTime(isoDate)).toBe('29 Aug 2024, 21:45');
+    });
+
+    test('pads single-digit hours and minutes', () => {
+      const isoDate = new Date(2024, 7, 5, 9, 5).toISOString();
+      expect(formatDateTime(isoDate)).toBe('5 Aug 2024, 09:05');
     });
   });
 });
