@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { ReactComponent as CloseIcon } from '../../assets/images/icon-close-modal.svg';
 import './Modal.css';
 
 const Modal = ({ 
@@ -66,7 +67,7 @@ const Modal = ({
             aria-label="Close modal"
             type="button"
           >
-            ×
+            <CloseIcon aria-hidden="true" />
           </button>
         </div>
         

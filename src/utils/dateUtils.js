@@ -24,3 +24,25 @@ export const formatDate = (dateString) => {
       month: 'short'
     });
   };
+
+  /**
+   * Format time to "14:23" (24-hour) format
+   * @param {string} dateString - ISO date string
+   * @returns {string} Formatted time
+   */
+  export const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  };
+
+  /**
+   * Format date and time to "19 Aug 2024, 14:23" format
+   * @param {string} dateString - ISO date string
+   * @returns {string} Formatted date and 24-hour time
+   */
+  export const formatDateTime = (dateString) =>
+    `${formatDate(dateString)}, ${formatTime(dateString)}`;

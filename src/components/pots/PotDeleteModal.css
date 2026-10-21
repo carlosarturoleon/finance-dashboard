@@ -1,0 +1,47 @@
+/* Pot Delete Modal - BEM approach */
+.pot-delete__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-250);
+}
+
+.pot-delete__confirm,
+.pot-delete__cancel {
+  width: 100%;
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-150);
+  cursor: pointer;
+}
+
+.pot-delete__confirm {
+  padding: var(--spacing-200);
+  border-radius: var(--radius-md);
+  background-color: var(--color-red);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  transition: opacity var(--transition-fast);
+}
+
+.pot-delete__confirm:hover {
+  opacity: 0.8;
+}
+
+.pot-delete__cancel {
+  padding: 0;
+  background: none;
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+  transition: color var(--transition-fast);
+}
+
+.pot-delete__cancel:hover {
+  color: var(--color-text-primary);
+}
+
+.pot-delete__confirm:focus-visible,
+.pot-delete__cancel:focus-visible {
+  outline: 2px solid var(--color-grey-900);
+  outline-offset: 2px;
+}
