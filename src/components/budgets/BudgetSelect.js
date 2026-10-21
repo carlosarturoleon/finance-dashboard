@@ -149,7 +149,7 @@ const BudgetSelect = ({
         ref={triggerRef}
         type="button"
         id={id}
-        className="budget-select__trigger"
+        className={`budget-select__trigger${isOpen ? ' budget-select__trigger--open' : ''}`}
         onClick={() => (isOpen ? close() : open())}
         onKeyDown={handleKeyDown}
         disabled={disabled}
@@ -208,6 +208,9 @@ const BudgetSelect = ({
                 <span className="budget-select__label">{option.label}</span>
                 {optionDisabled && disabledHint && (
                   <span className="budget-select__hint">{disabledHint}</span>
+                )}
+                {option.value === value && (
+                  <span className="budget-select__check" aria-hidden="true" />
                 )}
               </li>
             );
